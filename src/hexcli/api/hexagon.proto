@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+option go_package = "/hexcli";
+
+package hexcloud;
+
+message Empty {}
+
+message HexLocation {
+  int64 X = 1;
+  int64 Y = 2;
+  int64 Z = 3;
+  string HexID = 5;
+  map<string, string> LocalData = 6;
+  map<string, string> GlobalData = 7;
+}
+
+message HexInfo {
+  string ID = 1;
+  map<string, string> Data = 2;
+}
+
+message HexInfoList {
+  repeated HexInfo hexInfo = 1;
+}
+
+message HexLocationList {
+  repeated HexLocation hexLoc = 1;
+}
+
+message HexagonGetRequest {
+  HexLocation hexLoc = 1;
+  int64 radius = 2;
+  bool fill = 3;
+}
+
+message HexIDList {
+  repeated string HexID = 1;
+}
+
+message HexIDData {
+  string HexID = 1;
+  string dataKey = 2;
+  string value = 3;
+}
+
+message HexLocData {
+  int64 X = 1;
+  int64 Y = 2;
+  int64 Z = 3;
+  string dataKey = 4;
+  string value = 5;
+}
+
+message Status {
+  string msg = 1;
+}
+
+message Result {
+  bool success = 1;
+}
+
+service HexagonService {
+  rpc RepoAddHexagonInfo(HexInfoList) returns(Result);
+  rpc RepoGetHexagonInfo(HexIDList) returns(HexInfoList);
+  rpc RepoGetHexagonInfoData(HexIDData) returns(HexIDData);
+  rpc RepoGetAllHexagonInfo(Empty) returns(HexInfoList);
+  rpc RepoDelHexagonInfo(HexIDList) returns(Result);
+  rpc RepoDelHexagonInfoData(HexIDData) returns(Result);
+
+  rpc MapAdd(HexLocationList) returns (Result);
+  rpc MapAddData(HexLocData) returns (Result);
+  rpc MapGet(HexagonGetRequest) returns (HexLocationList);
+  rpc MapUpdate(HexLocation) returns (Result);
+  rpc MapUpdateData(HexLocation) returns (Result);
+  rpc MapRemove(HexLocationList) returns(Result);
+  rpc MapRemoveData(HexLocation) returns(Result);
+
+  rpc GetStatusServer(Empty) returns(Status);
+  rpc GetStatusStorage(Empty) returns(Status);
+  rpc GetStatusClients(Empty) returns(Status);
+}

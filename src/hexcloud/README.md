@@ -2,9 +2,15 @@
 
 Backend server and main access point via gRPC API for the game.
 
-## Build
-sq
+## Build and test
+`hexcloud` uses sqlite3 package which uses cgo. For this to compile you need to install the `gcc` compiler
+and set the `CGO_ENABLED=1` ennvironment variable.
 
+To build and test:
+```shell
+go build -v ./...
+go test -v ./...
+```
 
 ## Run
 ### Help

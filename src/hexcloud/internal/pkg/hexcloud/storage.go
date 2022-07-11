@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"github.com/golang/glog"
 	_ "github.com/mattn/go-sqlite3"
 	"io/ioutil"
 	"os"

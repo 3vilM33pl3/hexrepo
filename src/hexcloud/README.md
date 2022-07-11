@@ -2,6 +2,10 @@
 
 Backend server and main access point via gRPC API for the game.
 
+## Build
+sq
+
+
 ## Run
 ### Help
 ```shell
@@ -31,7 +35,7 @@ docker build -f ./deploy/hexcloud/Dockerfile -t hexcloud .
 ## Update gRPC proto
 ```shell
 go install google.golang.org/protobuf/cmd/protoc-gen-go
-go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 protoc --go_out=./internal/pkg  --go-grpc_out=./internal/pkg ./api/hexagon.proto
 ```
 

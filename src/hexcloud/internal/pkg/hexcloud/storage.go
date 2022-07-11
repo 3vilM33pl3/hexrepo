@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"github.com/golang/glog"
 	_ "github.com/mattn/go-sqlite3"
 	"io/ioutil"
 	"os"
@@ -419,7 +418,7 @@ func (h *HexStorage) MapUpdate(data *HexLocation) (err error) {
 	ctx := context.Background()
 	tx, err := h.Database.BeginTx(ctx, nil)
 	if err != nil {
-		glog.Errorf("Error Updating %d %d %d %s %s\n%s\n", data.X, data.Y, data.Z, err)
+		glog.Errorf("Error Updating %d %d %d %s\n", data.X, data.Y, data.Z, err)
 		return err
 	}
 
@@ -445,7 +444,7 @@ func (h *HexStorage) MapUpdate(data *HexLocation) (err error) {
 
 	err = tx.Commit()
 	if err != nil {
-		glog.Errorf("Error storing %d %d %d %s %s\n%s\n", data.X, data.Y, data.Z, err)
+		glog.Errorf("Error storing %d %d %d %s\n", data.X, data.Y, data.Z, err)
 		return err
 	}
 
@@ -457,7 +456,7 @@ func (h *HexStorage) MapRemove(data *HexLocation) (err error) {
 	ctx := context.Background()
 	tx, err := h.Database.BeginTx(ctx, nil)
 	if err != nil {
-		glog.Errorf("Error Updating %d %d %d %s %s\n%s\n", data.X, data.Y, data.Z, err)
+		glog.Errorf("Error Updating %d %d %d %s\n", data.X, data.Y, data.Z, err)
 		return err
 	}
 
@@ -473,7 +472,7 @@ func (h *HexStorage) MapRemove(data *HexLocation) (err error) {
 
 	err = tx.Commit()
 	if err != nil {
-		glog.Errorf("Error removing %d %d %d %s %s\n%s\n", data.X, data.Y, data.Z, err)
+		glog.Errorf("Error removing %d %d %d %s\n", data.X, data.Y, data.Z, err)
 		return err
 	}
 
@@ -485,7 +484,7 @@ func (h *HexStorage) MapRemoveData(data *HexLocation) (err error) {
 	ctx := context.Background()
 	tx, err := h.Database.BeginTx(ctx, nil)
 	if err != nil {
-		glog.Errorf("Error Updating data on %d %d %d %s %s\n%s\n", data.X, data.Y, data.Z, err)
+		glog.Errorf("Error Updating data on %d %d %d %s\n", data.X, data.Y, data.Z, err)
 		return err
 	}
 
@@ -493,7 +492,7 @@ func (h *HexStorage) MapRemoveData(data *HexLocation) (err error) {
 		sql := fmt.Sprintf("DELETE FROM mapdata WHERE x=%d AND y=%d AND key='%s';", data.X, data.Y, key)
 		_, err = tx.ExecContext(ctx, sql)
 		if err != nil {
-			glog.Errorf("Error Updating data on %d %d %d %s %s\n%s\n", data.X, data.Y, data.Z, key)
+			glog.Errorf("Error Updating data on %d %d %d %s\n", data.X, data.Y, data.Z, key)
 			tx.Rollback()
 			return err
 		}
@@ -501,7 +500,7 @@ func (h *HexStorage) MapRemoveData(data *HexLocation) (err error) {
 
 	err = tx.Commit()
 	if err != nil {
-		glog.Errorf("Error removing %d %d %d %s %s\n%s\n", data.X, data.Y, data.Z, err)
+		glog.Errorf("Error removing %d %d %d %s\n", data.X, data.Y, data.Z, err)
 		return err
 	}
 	return

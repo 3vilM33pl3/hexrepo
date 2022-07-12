@@ -16,4 +16,4 @@ jobs:
       - name: Build and zip
         working-directory: ./src/hexcom
         run:  |
-          & "C:\Program Files\CMake\bin\cmake.exe" --target create_zip -j 12
+          & "C:\Program Files\CMake\bin\cmake.exe" --target create_zip 

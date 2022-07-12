@@ -1,4 +1,4 @@
-name: HexWorld
+name: HexWorld hexcli
 
 on:
   push:

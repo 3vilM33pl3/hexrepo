@@ -1,4 +1,4 @@
-name: HexWorld
+name: HexWorld hexcloud
 
 on:
   push:

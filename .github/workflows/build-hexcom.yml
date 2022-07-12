@@ -15,4 +15,5 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build and zip
         working-directory: ./src/hexcom
-        run:  & "C:\Program Files\CMake\bin\cmake.exe" --build cmake-build-debug --target create_zip -j 12
+        run:  |
+          "C:\Program Files\CMake\bin\cmake.exe" --build cmake-build-debug --target create_zip -j 12

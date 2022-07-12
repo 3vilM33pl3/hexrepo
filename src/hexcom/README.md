@@ -1,26 +1,28 @@
 
 Hexcom is the client library which can be used to communicate with the [`hexcloud`](https://github.com/3vilM33pl3/hexcloud) backend.
 
-# VCPKG
 
-`vcpkg install grpc --triplet x64-windows`
+## Dependencies
+The [vcpkg](https://vcpkg.io/en/index.html) manager is installed as a git submodule in top level directory of this project.
 
-`vcpkg install protobuf --triplet x64-windows`
+### Windows 
+    vcpkg install grpc --triplet x64-windows
+    vcpkg install protobuf --triplet x64-windows
+    vcpkg install cli --triplet x64-windows
+    vcpkg install abseil --triplet x64-windows
 
-`vcpkg install boost --triplet x64-windows`
+### Mac
+
+
 
 
 ## Compile
 ### Windows
 Make sure your toolchain is configured for 64 bit builds.
 ### Dependencies
-Install dependencies with [vcpkg](https://vcpkg.io/en/index.html) manager:
+Install dependencies with  manager:
 
-    `vcpkg install grpc --triplet x64-windows`
 
-`vcpkg install protobuf --triplet x64-windows`
-
-`vcpkg install boost --triplet x64-windows`
 
 #### Ninja (Optional but recommended)
 Ninja dramatically accelerates building c++ programs. 
@@ -66,11 +68,11 @@ vcpkg can be installed with [`homebrew`](https://brew.sh/):
 `brew install vcpkg`
 
 ### Install dependencies 
-`vcpkg install protobuf cli boost-program-options`
+`vcpkg install protobuf cli`
 
 ### CMake flags
 ```shell
-cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=$HOME/vcpkg/scripts/buildsystems/vcpkg.cmake
+cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake
 ```
 
 ## Run

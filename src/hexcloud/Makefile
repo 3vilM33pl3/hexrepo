@@ -1,8 +1,8 @@
 build:
-	go build cmd/hexcloud.go
+	go build cmd/hexcloud/hexcloud.go
 
 run:
-	go run cmd/hexcloud.go
+	go run cmd/hexcloud/hexcloud.go
 
 protoc:
 	go install google.golang.org/protobuf/cmd/protoc-gen-go

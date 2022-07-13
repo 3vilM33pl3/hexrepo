@@ -20,5 +20,5 @@ jobs:
           ./vcpkg/bootstrap-vcpkg.bat
           ./vcpkg/vcpkg.exe install cli
           mkdir build
-          & "C:\Program Files\CMake\bin\cmake.exe" .
-          & "C:\Program Files\CMake\bin\cmake.exe" --build build --target create_zip -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake -GNinja 
+          & "C:\Program Files\CMake\bin\cmake.exe" -G Ninja -DCMAKE_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake .
+          & "C:\Program Files\CMake\bin\cmake.exe" --build build --target create_zip -j12

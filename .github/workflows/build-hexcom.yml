@@ -16,6 +16,8 @@ jobs:
       - name: Build and zip
         working-directory: ./src/hexcom
         run:  |
+          ./vcpkg/bootstrap-vcpkg.bat
+          ./vcpkg/vcpkg.exe install cli
           mkdir build
           & "C:\Program Files\CMake\bin\cmake.exe" .
           & "C:\Program Files\CMake\bin\cmake.exe" --build build --target create_zip 

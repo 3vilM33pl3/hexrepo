@@ -21,4 +21,4 @@ jobs:
           ./vcpkg/vcpkg.exe install cli
           mkdir build
           & "C:\Program Files\CMake\bin\cmake.exe" -GNinja -DCMAKE_TOOLCHAIN_FILE=C:/actions-runner/_work/hexrepo/hexrepo/src/hexcom/vcpkg/scripts/buildsystems/vcpkg.cmake .
-          & "C:\Program Files\CMake\bin\cmake.exe" --build build --target create_zip -j12
+          & "C:\Program Files\CMake\bin\cmake.exe" --build build --target create_zip -j12 -- -DCMAKE_TOOLCHAIN_FILE=C:/actions-runner/_work/hexrepo/hexrepo/src/hexcom/vcpkg/scripts/buildsystems/vcpkg.cmake

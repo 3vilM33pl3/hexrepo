@@ -18,8 +18,8 @@ jobs:
         run:  |
           git submodule update --init --recursive
           ./vcpkg/bootstrap-vcpkg.bat
-          ./vcpkg/vcpkg.exe install cli
+          ./vcpkg/vcpkg.exe install cli --triplet x64-windows
           mkdir build
           
-          & "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_MAKE_PROGRAM=C:\ProgramData\chocolatey\bin\ninja.exe -DCMAKE_TOOLCHAIN_FILE=C:\actions-runner\_work\hexrepo\hexrepo\src\hexcom\vcpkg\scripts\buildsystems\vcpkg.cmake -G Ninja -S . -B build
+          & "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_MAKE_PROGRAM=C:\ProgramData\chocolatey\bin\ninja.exe -DCMAKE_TOOLCHAIN_FILE=C:\actions-runner\_work\hexrepo\hexrepo\src\hexcom\vcpkg\scripts\buildsystems\vcpkg.cmake -G Ninja -S . -B build -A x64
           & "C:\Program Files\CMake\bin\cmake.exe" --build build --target create_zip -j12 

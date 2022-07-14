@@ -16,10 +16,13 @@ jobs:
       - name: Build and zip
         working-directory: ./src/hexcom
         run:  |
+          Import-Module "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
+          Enter-VsDevShell d5b09b2d
           git submodule update --init --recursive
           ./vcpkg/bootstrap-vcpkg.bat
           ./vcpkg/vcpkg.exe install cli --triplet x64-windows
+          ./vcpkg/vcpkg.exe install grpc --triplet x64-windows
           mkdir build
           
-          & "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_MAKE_PROGRAM=C:\ProgramData\chocolatey\bin\ninja.exe -DCMAKE_TOOLCHAIN_FILE=C:\actions-runner\_work\hexrepo\hexrepo\src\hexcom\vcpkg\scripts\buildsystems\vcpkg.cmake -G Ninja -S . -B build -A x64
+          & "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_MAKE_PROGRAM=C:\ProgramData\chocolatey\bin\ninja.exe -DCMAKE_TOOLCHAIN_FILE=.\vcpkg\scripts\buildsystems\vcpkg.cmake -G Ninja -S . -B build -A x64
           & "C:\Program Files\CMake\bin\cmake.exe" --build build --target create_zip -j12 

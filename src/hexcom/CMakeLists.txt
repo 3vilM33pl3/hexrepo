@@ -89,6 +89,7 @@ add_subdirectory(apps/example)
 set(HEXCOM_INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/../hexcom-install/)
 set(HEXCOM_INSTALL_DIR_HEADERS ${CMAKE_CURRENT_BINARY_DIR}/../hexcom-install/ThirdParty/HexWorldLibrary/include/hexworld)
 set(HEXCOM_INSTALL_DIR_WIN64 ${CMAKE_CURRENT_BINARY_DIR}/../hexcom-install/ThirdParty/HexWorldLibrary/Win64/Release)
+set(HEXCOM_INSTALL_DIR_UNREAL ${CMAKE_CURRENT_BINARY_DIR}/../hexcom-install/ThirdParty/HexWorldLibrary/)
 
 file(MAKE_DIRECTORY ${HEXCOM_INSTALL_DIR_HEADERS})
 file(MAKE_DIRECTORY ${HEXCOM_INSTALL_DIR_WIN64})
@@ -98,6 +99,8 @@ set(HEXCOM_HEADER_FILES
         ${CMAKE_SOURCE_DIR}/include/hexworld/hex_com_state.h
         ${CMAKE_SOURCE_DIR}/include/hexworld/hex_lib.h
         )
+
+set(HEXCOM_UNREAL_BUILD_FILE ${CMAKE_SOURCE_DIR}/unreal/HexWorldLibrary.Build.cs)
 
 if(WIN32)
     set(HEXCOM_LIBS_WIN64
@@ -142,11 +145,13 @@ endif()
 
 add_custom_target(copy_headers)
 add_custom_target(copy_libs_win64)
+add_custom_target(copy_unreal_build_files)
 add_custom_target(create_zip COMMAND ${CMAKE_COMMAND} -E tar "cvf" "archive.zip" --format=zip -- ${HEXCOM_INSTALL_DIR})
 
 add_dependencies(copy_libs_win64 hex_client_lib)
 add_dependencies(copy_headers copy_libs_win64)
-add_dependencies(create_zip copy_headers)
+add_dependencies(copy_unreal_build_files copy_headers)
+add_dependencies(create_zip copy_unreal_build_files)
 
 foreach( FILE_I ${HEXCOM_LIBS_WIN64})
     add_custom_command(
@@ -165,3 +170,10 @@ foreach( FILE_I ${HEXCOM_HEADER_FILES})
             ARGS -E copy ${FILE_I} ${HEXCOM_INSTALL_DIR_HEADERS}
     )
 endforeach( FILE_I )
+
+add_custom_command(
+        TARGET copy_unreal_build_files
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND}
+        ARGS -E copy ${HEXCOM_UNREAL_BUILD_FILE} ${HEXCOM_INSTALL_DIR_UNREAL}
+)

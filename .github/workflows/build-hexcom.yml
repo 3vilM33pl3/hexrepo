@@ -23,4 +23,4 @@ jobs:
           ./vcpkg/vcpkg.exe install cli --triplet x64-windows
           mkdir build
           & "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_TOOLCHAIN_FILE=".\vcpkg\scripts\buildsystems\vcpkg.cmake" -G Ninja -S . -B build 
-          & "C:\Program Files\CMake\bin\cmake.exe" --build build --target create_zip -j12 
+          & "C:\Program Files\CMake\bin\cmake.exe" --build build --target hexworld_client -j12 

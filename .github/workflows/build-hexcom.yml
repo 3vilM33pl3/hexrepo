@@ -13,7 +13,7 @@ jobs:
     runs-on: [self-hosted, Windows, X64]
     steps:
       - uses: actions/checkout@v2
-      - name: Build and zip
+      - name: Configure 
         working-directory: ./src/hexcom
         run:  |
           Import-Module "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
@@ -23,4 +23,13 @@ jobs:
           ./vcpkg/vcpkg.exe install cli --triplet x64-windows
           mkdir build
           & "C:\Program Files\CMake\bin\cmake.exe" -DCMAKE_TOOLCHAIN_FILE=".\vcpkg\scripts\buildsystems\vcpkg.cmake" -G Ninja -S . -B build 
+      - name: Build
+        working-directory: ./src/hexcom
+        run:  |
           & "C:\Program Files\CMake\bin\cmake.exe" --build build --target hexworld_client -j12 
+      - name: Create zip
+        working-directory: ./src/hexcom
+        run:  |
+          & "C:\Program Files\CMake\bin\cmake.exe" --build build --target create_zip -j12 
+       
+          

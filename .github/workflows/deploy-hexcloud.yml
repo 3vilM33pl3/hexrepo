@@ -14,8 +14,8 @@ env:
   SERVICE_NAME: hexcloud
 
 jobs:
-  job_id:
-    # Add "id-token" with the intended permissions.
+  setup-build-deploy:
+    runs-on: ubuntu-latest
     permissions:
       contents: 'read'
       id-token: 'write'

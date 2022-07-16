@@ -14,39 +14,39 @@ env:
   SERVICE_NAME: hexcloud
 
 jobs:
-  setup-build-deploy:
-    name: Setup, Build, and Deploy
-    runs-on: ubuntu-latest
+  job_id:
+    # Add "id-token" with the intended permissions.
+    permissions:
+      contents: 'read'
+      id-token: 'write'
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v1
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v0'
+      with:
+        credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS}}
 
-      # Setup gcloud CLI
-      - uses: google-github-actions/setup-gcloud@main
-        with:
-          version: '275.0.0'
-          service_account_email: ${{ secrets.SA_EMAIL_GA }}
-          service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS}}
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v0'
 
-      # Configure gcloud CLI
-      - name: gcloud Set up
-        working-directory: ./src/hexcloud
-        run: |
-          gcloud config set project $PROJECT_ID
+    # Configure gcloud CLI
+    - name: gcloud Set up
+      working-directory: ./src/hexcloud
+      run: |
+        gcloud config set project $PROJECT_ID
 
-      # Build and push image to Google Container Registry
-      - name: Build
-        working-directory: ./src/hexcloud
-        run: |
-          gcloud builds submit -t gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA --timeout 20m .
-      # Deploy image to Cloud Run
-      - name: Deploy
-        working-directory: ./src/hexcloud
-        run: |
-          gcloud run deploy $SERVICE_NAME \
-            --region $RUN_REGION \
-            --image gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA \
-            --platform managed \
-            --allow-unauthenticated
-            
+    # Build and push image to Google Container Registry
+    - name: Build
+      working-directory: ./src/hexcloud
+      run: |
+        gcloud builds submit -t gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA --timeout 20m .
+    # Deploy image to Cloud Run
+    - name: Deploy
+      working-directory: ./src/hexcloud
+      run: |
+        gcloud run deploy $SERVICE_NAME \
+          --region $RUN_REGION \
+          --image gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA \
+          --platform managed \
+          --allow-unauthenticated
+          

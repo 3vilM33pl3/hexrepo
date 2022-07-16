@@ -1,9 +1,5 @@
 syntax = "proto3";
 
-option go_package = "/hexcloud";
-
-package hexcloud;
-
 message Empty {}
 
 message HexLocation {

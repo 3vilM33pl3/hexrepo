@@ -1,5 +1,5 @@
 
-get_filename_component(PROTO_FILE ${CMAKE_CURRENT_SOURCE_DIR}/protos/hexagon.proto ABSOLUTE)
+get_filename_component(PROTO_FILE ${CMAKE_CURRENT_SOURCE_DIR}/../../../api/hexagon.proto ABSOLUTE)
 get_filename_component(PROTO_PATH "${PROTO_FILE}" PATH)
 
 set(PROTOBUF_SOURCE "${CMAKE_CURRENT_BINARY_DIR}/hexagon.pb.cc")

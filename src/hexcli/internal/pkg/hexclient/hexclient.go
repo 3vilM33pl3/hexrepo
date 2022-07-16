@@ -6,7 +6,7 @@ import (
 	"crypto/x509"
 	"errors"
 	"fmt"
-	"github.com/3vilm33pl3/hexcli/internal/pkg/hexcli"
+	"github.com/3vilm33pl3/hexcli/internal/pkg/hexcloud"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"io/ioutil"
@@ -16,7 +16,7 @@ import (
 )
 
 type Client struct {
-	grpcClient hexcli.HexagonServiceClient
+	grpcClient hexcloud.HexagonServiceClient
 	secure     bool
 	serverAddr string
 }
@@ -36,7 +36,7 @@ func NewClient(serverAddr string, secure bool) (c *Client, err error) {
 	return
 }
 
-func (c *Client) RepoAddHexagonInfo(hexInfoList *hexcli.HexInfoList) (err error) {
+func (c *Client) RepoAddHexagonInfo(hexInfoList *hexcloud.HexInfoList) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -53,7 +53,7 @@ func (c *Client) RepoAddHexagonInfo(hexInfoList *hexcli.HexInfoList) (err error)
 	return nil
 }
 
-func (c *Client) RepoDeleteHexagonInfo(hexIDList *hexcli.HexIDList) (err error) {
+func (c *Client) RepoDeleteHexagonInfo(hexIDList *hexcloud.HexIDList) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -70,7 +70,7 @@ func (c *Client) RepoDeleteHexagonInfo(hexIDList *hexcli.HexIDList) (err error) 
 	return nil
 }
 
-func (c *Client) RepoDeleteHexagonInfoData(hexIDData *hexcli.HexIDData) error {
+func (c *Client) RepoDeleteHexagonInfoData(hexIDData *hexcloud.HexIDData) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -87,7 +87,7 @@ func (c *Client) RepoDeleteHexagonInfoData(hexIDData *hexcli.HexIDData) error {
 	return nil
 }
 
-func (c *Client) RepoGetHexagonInfo(hexIDList *hexcli.HexIDList) (hexInfoList *hexcli.HexInfoList, err error) {
+func (c *Client) RepoGetHexagonInfo(hexIDList *hexcloud.HexIDList) (hexInfoList *hexcloud.HexInfoList, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -100,7 +100,7 @@ func (c *Client) RepoGetHexagonInfo(hexIDList *hexcli.HexIDList) (hexInfoList *h
 	return result, nil
 }
 
-func (c *Client) RepoAddHexagonInfoData(hexIDData *hexcli.HexIDData) (*hexcli.HexIDData, error) {
+func (c *Client) RepoAddHexagonInfoData(hexIDData *hexcloud.HexIDData) (*hexcloud.HexIDData, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -114,11 +114,11 @@ func (c *Client) RepoAddHexagonInfoData(hexIDData *hexcli.HexIDData) (*hexcli.He
 
 }
 
-func (c *Client) RepoGetAllHexagonInfo() (hexInfoList *hexcli.HexInfoList, err error) {
+func (c *Client) RepoGetAllHexagonInfo() (hexInfoList *hexcloud.HexInfoList, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	result, err := c.grpcClient.RepoGetAllHexagonInfo(ctx, &hexcli.Empty{})
+	result, err := c.grpcClient.RepoGetAllHexagonInfo(ctx, &hexcloud.Empty{})
 
 	if err != nil {
 		return nil, err
@@ -127,7 +127,7 @@ func (c *Client) RepoGetAllHexagonInfo() (hexInfoList *hexcli.HexInfoList, err e
 	return result, nil
 }
 
-func (c *Client) MapAdd(hexLocationList *hexcli.HexLocationList) (err error) {
+func (c *Client) MapAdd(hexLocationList *hexcloud.HexLocationList) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -144,7 +144,7 @@ func (c *Client) MapAdd(hexLocationList *hexcli.HexLocationList) (err error) {
 	return nil
 }
 
-func (c *Client) MapAddData(hexLocData *hexcli.HexLocData) (err error) {
+func (c *Client) MapAddData(hexLocData *hexcloud.HexLocData) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -161,7 +161,7 @@ func (c *Client) MapAddData(hexLocData *hexcli.HexLocData) (err error) {
 	return nil
 }
 
-func (c *Client) MapRemove(hexLocationList *hexcli.HexLocationList) (err error) {
+func (c *Client) MapRemove(hexLocationList *hexcloud.HexLocationList) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -178,7 +178,7 @@ func (c *Client) MapRemove(hexLocationList *hexcli.HexLocationList) (err error) 
 	return
 }
 
-func (c *Client) MapRemoveData(hexLocation *hexcli.HexLocation) (err error) {
+func (c *Client) MapRemoveData(hexLocation *hexcloud.HexLocation) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -195,12 +195,12 @@ func (c *Client) MapRemoveData(hexLocation *hexcli.HexLocation) (err error) {
 	return
 }
 
-func (c *Client) MapGet(hexLocation *hexcli.HexLocation, radius int64) (hexList *hexcli.HexLocationList, err error) {
+func (c *Client) MapGet(hexLocation *hexcloud.HexLocation, radius int64) (hexList *hexcloud.HexLocationList, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	request := hexcli.HexagonGetRequest{
-		HexLoc: &hexcli.HexLocation{
+	request := hexcloud.HexagonGetRequest{
+		HexLoc: &hexcloud.HexLocation{
 			X: hexLocation.X,
 			Y: hexLocation.Y,
 			Z: hexLocation.Z,
@@ -217,7 +217,7 @@ func (c *Client) MapGet(hexLocation *hexcli.HexLocation, radius int64) (hexList 
 	return result, nil
 }
 
-func (c *Client) MapUpdate(hexLoc *hexcli.HexLocation) (*hexcli.Result, error) {
+func (c *Client) MapUpdate(hexLoc *hexcloud.HexLocation) (*hexcloud.Result, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -234,7 +234,7 @@ func (c *Client) StatusServer() (message string, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	status, err := c.grpcClient.GetStatusServer(ctx, &hexcli.Empty{})
+	status, err := c.grpcClient.GetStatusServer(ctx, &hexcloud.Empty{})
 	if err != nil {
 		return "", err
 	}
@@ -245,7 +245,7 @@ func (c *Client) StatusStorage() (message string, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	status, err := c.grpcClient.GetStatusStorage(ctx, &hexcli.Empty{})
+	status, err := c.grpcClient.GetStatusStorage(ctx, &hexcloud.Empty{})
 	if err != nil {
 		return "", err
 	}
@@ -256,7 +256,7 @@ func (c *Client) StatusClients() (message string, err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	status, err := c.grpcClient.GetStatusClients(ctx, &hexcli.Empty{})
+	status, err := c.grpcClient.GetStatusClients(ctx, &hexcloud.Empty{})
 	if err != nil {
 		return "", err
 	}
@@ -312,7 +312,7 @@ func (c *Client) Connect() (err error) {
 	if err != nil {
 		return fmt.Errorf("Unable to connect: %s", err)
 	}
-	c.grpcClient = hexcli.NewHexagonServiceClient(conn)
+	c.grpcClient = hexcloud.NewHexagonServiceClient(conn)
 
 	return nil
 }

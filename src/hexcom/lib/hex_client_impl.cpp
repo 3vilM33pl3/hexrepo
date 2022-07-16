@@ -117,7 +117,7 @@ std::vector<Hexagon> HexagonClientImpl::MapGet(const Hexagon *hex, const int64_t
     request.set_fill(fill);
 
     grpc::ClientContext context;
-    hexcloud::HexLocationList hexLocationList;
+    ::HexLocationList hexLocationList;
 
     auto status = stub->MapGet(&context, request, &hexLocationList);
     if (status.ok()) {

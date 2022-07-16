@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"encoding/csv"
 	"fmt"
-	"github.com/3vilm33pl3/hexcli/internal/pkg/hexcli"
+	"github.com/3vilm33pl3/hexcli/internal/pkg/hexcloud"
 	"github.com/spf13/cobra"
 	"log"
 	"os"
@@ -27,13 +27,13 @@ var repoAddCmd = &cobra.Command{
 		secure, _ := cmd.Flags().GetBool("secure")
 
 		client, err := NewClient(serverAddr, secure)
-		var infoList hexcli.HexInfoList
+		var infoList hexcloud.HexInfoList
 
 		ref := args[0]
 		if err != nil {
 			fmt.Printf("Error parsing exits %s", err)
 		}
-		infoList.HexInfo = append(infoList.HexInfo, &hexcli.HexInfo{ID: ref})
+		infoList.HexInfo = append(infoList.HexInfo, &hexcloud.HexInfo{ID: ref})
 
 		err = client.RepoAddHexagonInfo(&infoList)
 		if err != nil {
@@ -52,7 +52,7 @@ var repoAddFileCmd = &cobra.Command{
 		secure, _ := cmd.Flags().GetBool("secure")
 
 		client, err := NewClient(serverAddr, secure)
-		var infoList hexcli.HexInfoList
+		var infoList hexcloud.HexInfoList
 
 		f, err := os.Open(args[0])
 		if err != nil {
@@ -67,7 +67,7 @@ var repoAddFileCmd = &cobra.Command{
 		}
 
 		for _, line := range csvLines {
-			hexInfo := &hexcli.HexInfo{
+			hexInfo := &hexcloud.HexInfo{
 				ID: line[0],
 			}
 			infoList.HexInfo = append(infoList.HexInfo, hexInfo)
@@ -90,7 +90,7 @@ var repoAddDataCmd = &cobra.Command{
 		secure, _ := cmd.Flags().GetBool("secure")
 
 		client, err := NewClient(serverAddr, secure)
-		var infoList hexcli.HexInfoList
+		var infoList hexcloud.HexInfoList
 
 		if err != nil {
 			fmt.Printf("Error parsing exits %s", err)
@@ -104,7 +104,7 @@ var repoAddDataCmd = &cobra.Command{
 		ref := args[0]
 		key := args[1]
 		value := args[2]
-		hexInfo := &hexcli.HexInfo{ID: ref}
+		hexInfo := &hexcloud.HexInfo{ID: ref}
 		hexInfo.Data = make(map[string]string)
 		hexInfo.Data[key] = value
 		infoList.HexInfo = append(infoList.HexInfo, hexInfo)
@@ -126,7 +126,7 @@ var repoDelCmd = &cobra.Command{
 		secure, _ := cmd.Flags().GetBool("secure")
 
 		client, err := NewClient(serverAddr, secure)
-		var infoList hexcli.HexIDList
+		var infoList hexcloud.HexIDList
 
 		for _, id := range args {
 			infoList.HexID = append(infoList.HexID, id)
@@ -149,7 +149,7 @@ var repoDelDataCmd = &cobra.Command{
 		secure, _ := cmd.Flags().GetBool("secure")
 
 		client, err := NewClient(serverAddr, secure)
-		var hexIDData hexcli.HexIDData
+		var hexIDData hexcloud.HexIDData
 
 		if len(args) < 2 {
 			fmt.Printf("Not enough arguments\n")
@@ -174,7 +174,7 @@ var repoGetCmd = &cobra.Command{
 		secure, _ := cmd.Flags().GetBool("secure")
 
 		client, err := NewClient(serverAddr, secure)
-		var infoList hexcli.HexIDList
+		var infoList hexcloud.HexIDList
 
 		infoList.HexID = append(infoList.HexID, args[0])
 
@@ -202,7 +202,7 @@ var repoGetDataCmd = &cobra.Command{
 		secure, _ := cmd.Flags().GetBool("secure")
 
 		client, err := NewClient(serverAddr, secure)
-		var hexIDData hexcli.HexIDData
+		var hexIDData hexcloud.HexIDData
 
 		if len(args) < 2 {
 			fmt.Printf("Not enough arguments\n")

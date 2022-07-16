@@ -1,8 +1,5 @@
 syntax = "proto3";
 
-option go_package = "/hexcli";
-
-package hexcloud;
 
 message Empty {}
 

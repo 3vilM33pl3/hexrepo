@@ -2,7 +2,7 @@ package hexclient
 
 import (
 	"fmt"
-	"github.com/3vilm33pl3/hexcli/internal/pkg/hexcli"
+	"github.com/3vilm33pl3/hexcli/internal/pkg/hexcloud"
 	"github.com/golang/glog"
 	"github.com/spf13/cobra"
 	"strconv"
@@ -39,14 +39,14 @@ var mapAddCmd = &cobra.Command{
 			return
 		}
 
-		hex := &hexcli.HexLocation{
+		hex := &hexcloud.HexLocation{
 			X:     x,
 			Y:     y,
 			Z:     z,
 			HexID: args[3],
 		}
 
-		hexLocList := &hexcli.HexLocationList{}
+		hexLocList := &hexcloud.HexLocationList{}
 		hexLocList.HexLoc = append(hexLocList.HexLoc, hex)
 
 		err = client.MapAdd(hexLocList)
@@ -70,7 +70,7 @@ var mapAddData = &cobra.Command{
 
 		x, y, z, err := extractHexCoord(args)
 
-		hexLocData := hexcli.HexLocData{
+		hexLocData := hexcloud.HexLocData{
 			X:       x,
 			Y:       y,
 			Z:       z,
@@ -102,7 +102,7 @@ var mapGetCmd = &cobra.Command{
 			return
 		}
 
-		result, err := client.MapGet(&hexcli.HexLocation{
+		result, err := client.MapGet(&hexcloud.HexLocation{
 			X: x,
 			Y: y,
 			Z: z,
@@ -137,14 +137,14 @@ var mapRemoveCmd = &cobra.Command{
 		secure, _ := cmd.Flags().GetBool("secure")
 
 		client, err := NewClient(serverAddr, secure)
-		var hexList hexcli.HexLocationList
+		var hexList hexcloud.HexLocationList
 
 		x, y, z, err := extractHexCoord(args)
 		if err != nil {
 			return
 		}
 
-		hex := &hexcli.HexLocation{
+		hex := &hexcloud.HexLocation{
 			X:     x,
 			Y:     y,
 			Z:     z,
@@ -178,7 +178,7 @@ var mapRemoveDataCmd = &cobra.Command{
 
 		data := make(map[string]string)
 		data[args[3]] = ""
-		hex := &hexcli.HexLocation{
+		hex := &hexcloud.HexLocation{
 			X:         x,
 			Y:         y,
 			Z:         z,
@@ -199,14 +199,14 @@ var mapUpdateCmd = &cobra.Command{
 		secure, _ := cmd.Flags().GetBool("secure")
 
 		client, err := NewClient(serverAddr, secure)
-		var hexList hexcli.HexLocationList
+		var hexList hexcloud.HexLocationList
 
 		x, y, z, err := extractHexCoord(args)
 		if err != nil {
 			return
 		}
 
-		hex := &hexcli.HexLocation{
+		hex := &hexcloud.HexLocation{
 			X:     x,
 			Y:     y,
 			Z:     z,
@@ -232,7 +232,7 @@ var mapUpdateDataCmd = &cobra.Command{
 		secure, _ := cmd.Flags().GetBool("secure")
 
 		client, err := NewClient(serverAddr, secure)
-		var hexList hexcli.HexLocationList
+		var hexList hexcloud.HexLocationList
 
 		x, y, z, err := extractHexCoord(args)
 		if err != nil {
@@ -241,7 +241,7 @@ var mapUpdateDataCmd = &cobra.Command{
 
 		data := make(map[string]string)
 		data[args[3]] = args[4]
-		hex := &hexcli.HexLocation{
+		hex := &hexcloud.HexLocation{
 			X:         x,
 			Y:         y,
 			Z:         z,

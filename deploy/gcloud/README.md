@@ -14,7 +14,7 @@ The API Gateway uses this to get the de
 Create with the protocol buffer command:
 
 ```shell
-protoc --go_out=./internal/pkg  --descriptor_set_out=deploy/gcloud/api_descriptor.pb --go-grpc_out=./internal/pkg ./api/hexagon.proto
+protoc --proto_path=../../ --go_opt=Mapi/hexagon.proto=/hexcloud --descriptor_set_out=deploy/gcloud/api_descriptor.pb --go-grpc_opt=Mapi/hexagon.proto=/hexcloud --go_out=./internal/pkg --go-grpc_out=./internal/pkg ../../api/hexagon.proto
 ```
 
 

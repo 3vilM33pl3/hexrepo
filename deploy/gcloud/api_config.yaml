@@ -1,0 +1,44 @@
+type: google.api.Service
+config_version: 3
+name: "*.apigateway.robot_motel.cloud.goog"
+title: API Gateway Cloud Run gRPC hexcloud
+apis:
+  - name: HexagonService
+usage:
+  rules:
+    - selector: HexagonService.RepoAddHexagonInfo
+      allow_unregistered_calls: true
+    - selector: HexagonService.RepoGetHexagonInfo
+      allow_unregistered_calls: true
+    - selector: HexagonService.RepoGetHexagonInfoData
+      allow_unregistered_calls: true
+    - selector: HexagonService.RepoGetAllHexagonInfo
+      allow_unregistered_calls: true
+    - selector: HexagonService.RepoDelHexagonInfo
+      allow_unregistered_calls: true
+    - selector: HexagonService.RepoDelHexagonInfoData
+      allow_unregistered_calls: true
+    - selector: HexagonService.MapAdd
+      allow_unregistered_calls: true
+    - selector: HexagonService.MapAddData
+      allow_unregistered_calls: true
+    - selector: HexagonService.MapGet
+      allow_unregistered_calls: true
+    - selector: HexagonService.MapUpdate
+      allow_unregistered_calls: true
+    - selector: HexagonService.MapUpdateData
+      allow_unregistered_calls: true
+    - selector: HexagonService.MapRemove
+      allow_unregistered_calls: true
+    - selector: HexagonService.MapRemoveData
+      allow_unregistered_calls: true
+    - selector: HexagonService.GetStatusServer
+      allow_unregistered_calls: true
+    - selector: HexagonService.GetStatusStorage
+      allow_unregistered_calls: true
+    - selector: HexagonService.GetStatusClients
+      allow_unregistered_calls: true
+backend:
+  rules:
+    - selector: "*"
+      address: grpcs://hexcloud-j6feiuh7aa-ue.a.run.app

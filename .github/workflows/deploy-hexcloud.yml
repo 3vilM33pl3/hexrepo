@@ -49,3 +49,4 @@ jobs:
             --image gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA \
             --platform managed \
             --allow-unauthenticated
+            

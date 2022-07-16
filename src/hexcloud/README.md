@@ -42,7 +42,7 @@ docker build -f ./deploy/hexcloud/Dockerfile -t hexcloud .
 ```shell
 go install google.golang.org/protobuf/cmd/protoc-gen-go
 go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
-protoc --proto_path=../../ --go_opt=Mapi/hexagon.proto=/hexcloud --go-grpc_opt=Mapi/hexagon.proto=/hexcloud --go_out=./internal/pkg --go-grpc_out=./internal/pkg api/hexagon.proto
+protoc --proto_path=../../ --go_opt=Mapi/hexagon.proto=/hexcloud --go-grpc_opt=Mapi/hexagon.proto=/hexcloud --go_out=./internal/pkg --go-grpc_out=./internal/pkg ../../api/hexagon.proto
 ```
 
 ## Program Flow

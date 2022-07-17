@@ -1,13 +1,39 @@
 package main
 
 import (
+	"cloud.google.com/go/firestore"
+	"context"
 	"flag"
 	"github.com/golang/glog"
 	"google.golang.org/grpc"
 	"hexcloud/internal/pkg/hexcloud"
+	"log"
 	"net"
 	"os"
 )
+
+func smallExperiment() {
+	// Sets your Google Cloud Platform project ID.
+	projectID := "robot-motel"
+	ctx := context.Background()
+
+	client, err := firestore.NewClient(ctx, projectID)
+	if err != nil {
+		log.Printf("Failed to create client: %v", err)
+		return
+	}
+	// Close client when done with
+	defer client.Close()
+
+	_, _, err = client.Collection("users").Add(ctx, map[string]interface{}{
+		"first": "Olivier",
+		"last":  "Van Acker",
+		"born":  1971,
+	})
+	if err != nil {
+		log.Printf("Failed adding alovelace: %v", err)
+	}
+}
 
 func main() {
 	var address string
@@ -23,6 +49,8 @@ func main() {
 	flag.StringVar(&dbName, "dbname", "hexagon.db", "name of database file")
 	flag.Parse()
 	flag.Lookup("logtostderr").Value.Set("true") // setting for glog
+
+	smallExperiment()
 
 	port, set := os.LookupEnv("PORT")
 	if set {

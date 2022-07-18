@@ -67,10 +67,18 @@ func NewFirestoreClient(ctx context.Context) (storage *HexStorageFirestore, err 
 	return storage, nil
 }
 
-func cast(in map[string]string) (out map[string]interface{}) {
+func castToInterface(in map[string]string) (out map[string]interface{}) {
 	out = make(map[string]interface{}, len(in))
 	for k, v := range in {
 		out[k] = v
+	}
+	return out
+}
+
+func castFromInterface(in map[string]interface{}) (out map[string]string) {
+	out = make(map[string]string, len(in))
+	for k, v := range in {
+		out[k] = v.(string)
 	}
 	return out
 }
@@ -79,7 +87,7 @@ func (h *HexStorageFirestore) AddHexagonToRepo(hexInfo *HexInfo) {
 	ctx := context.Background()
 
 	if hexInfo.ID != "" {
-		result, err := h.hexRepo.Doc(hexInfo.ID).Set(ctx, cast(hexInfo.GetData()))
+		result, err := h.hexRepo.Doc(hexInfo.ID).Set(ctx, castToInterface(hexInfo.GetData()))
 		if err != nil {
 			glog.Errorf("%s\n%v", result, err)
 		}
@@ -93,9 +101,28 @@ func (h *HexStorageFirestore) GetHexagonInfoAll() (hexInfoList *HexInfoList) {
 }
 
 func (h *HexStorageFirestore) GetHexagonInfo(hexID string) (hexInfo *HexInfo) {
-	UnimplementedStorageControllerFunction()
+	ctx := context.Background()
+
+	docRef := h.hexRepo.Doc(hexID)
+	doc, err := docRef.Get(ctx)
+
+	if err != nil {
+		glog.Errorf("%v", err)
+		return nil
+	}
+
+	hexInfo = newHexInfo(hexID, doc)
 
 	return
+}
+
+func newHexInfo(id string, doc *firestore.DocumentSnapshot) *HexInfo {
+	hexInfo := &HexInfo{
+		ID: id,
+	}
+	hexInfo.Data = castFromInterface(doc.Data())
+
+	return hexInfo
 }
 
 func (h *HexStorageFirestore) AddHexagonToMap(hexLocation *HexLocation) {
@@ -115,11 +142,16 @@ func (h *HexStorageFirestore) DeleteHexagonFromMap(hexLocation *HexLocation) {
 }
 
 func (h *HexStorageFirestore) DeleteHexagonFromRepo(hexID string) {
-	UnimplementedStorageControllerFunction()
+	ctx := context.Background()
+
+	_, err := h.hexRepo.Doc(hexID).Delete(ctx)
+	if err != nil {
+		glog.Errorf("%v", err)
+	}
+
 }
 
 func (h *HexStorageFirestore) SizeMap() (count int) {
-	UnimplementedStorageControllerFunction()
 
 	return
 }
@@ -135,10 +167,25 @@ func (h *HexStorageFirestore) DeleteHexagonDataFromRepo(id string, key string) {
 
 }
 
-func (h *HexStorageFirestore) GetHexagonInfoData(id string, key string) (hexIDData *HexIDData) {
-	UnimplementedStorageControllerFunction()
+func (h *HexStorageFirestore) GetHexagonInfoData(hexID string, key string) (hexIDData *HexIDData) {
+	ctx := context.Background()
 
-	return
+	docRef := h.hexRepo.Doc(hexID)
+	doc, err := docRef.Get(ctx)
+
+	if err != nil {
+		glog.Errorf("%v", err)
+		return nil
+	}
+
+	hexInfo := newHexInfo(hexID, doc)
+	hexIDData = &HexIDData{
+		HexID:   hexID,
+		DataKey: key,
+		Value:   hexInfo.Data[key],
+	}
+
+	return hexIDData
 }
 
 func (h *HexStorageFirestore) AddDataToMap(data *HexLocData) (err error) {

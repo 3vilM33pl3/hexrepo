@@ -34,7 +34,7 @@ run-repo-add-data-file:
 	go run nb.go repo add data file hexagon_data.csv --secure=$(SECURE) --addr=$(ADDRESS)
 
 run-repo-get:
-	go run nb.go repo get 0000-0000-0000-0000 --secure=$(SECURE) --addr=$(ADDRESS)
+	go run nb.go repo get 1000-0000-0000-0000 --secure=$(SECURE) --addr=$(ADDRESS)
 
 run-repo-get-data:
 	go run nb.go repo get data 1000-0000-0000-0000 biome --secure=$(SECURE) --addr=$(ADDRESS)

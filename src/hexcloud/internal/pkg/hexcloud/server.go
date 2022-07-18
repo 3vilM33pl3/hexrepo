@@ -8,7 +8,7 @@ import (
 )
 
 type Server struct {
-	Storage   *HexStorage
+	Storage   HexStorage
 	RunsLocal bool
 }
 

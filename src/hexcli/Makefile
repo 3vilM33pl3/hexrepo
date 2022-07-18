@@ -1,5 +1,5 @@
-SECURE=true
-ADDRESS=hexcloud-j6feiuh7aa-ue.a.run.app:443
+SECURE=false
+ADDRESS=localhost:8080
 
 build:
 	go build -o bin/nb nb.go

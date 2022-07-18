@@ -67,11 +67,19 @@ func NewFirestoreClient(ctx context.Context) (storage *HexStorageFirestore, err 
 	return storage, nil
 }
 
+func cast(in map[string]string) (out map[string]interface{}) {
+	out = make(map[string]interface{}, len(in))
+	for k, v := range in {
+		out[k] = v
+	}
+	return out
+}
+
 func (h *HexStorageFirestore) AddHexagonToRepo(hexInfo *HexInfo) {
 	ctx := context.Background()
 
 	if hexInfo.ID != "" {
-		result, err := h.hexRepo.Doc(hexInfo.ID).Set(ctx, hexInfo.GetData())
+		result, err := h.hexRepo.Doc(hexInfo.ID).Set(ctx, cast(hexInfo.GetData()))
 		if err != nil {
 			glog.Errorf("%s\n%v", result, err)
 		}

@@ -27,7 +27,7 @@ run-repo-add:
 run-repo-add-file:
 	go run nb.go repo add file hexagons.csv --secure=$(SECURE) --addr=$(ADDRESS)
 
-w	run-repo-add-data:
+run-repo-add-data:
 	go run nb.go repo add data 1000-0000-0000-0000 biome swamp --secure=$(SECURE) --addr=$(ADDRESS)
 
 run-repo-add-data-file:

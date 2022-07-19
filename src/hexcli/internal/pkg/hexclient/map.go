@@ -206,11 +206,13 @@ var mapUpdateCmd = &cobra.Command{
 			return
 		}
 
+		hexId := args[3]
+
 		hex := &hexcloud.HexLocation{
 			X:     x,
 			Y:     y,
 			Z:     z,
-			HexID: "",
+			HexID: hexId,
 		}
 
 		hexList.HexLoc = append(hexList.HexLoc, hex)

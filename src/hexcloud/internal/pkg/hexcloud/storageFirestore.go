@@ -24,27 +24,6 @@ type HexStorageFirestore struct {
 	hexRepo *firestore.CollectionRef
 }
 
-func biject(a int64) (A uint64) {
-	if a >= 0 {
-		A = uint64(2 * a)
-	} else {
-		A = uint64(-2*a - 1)
-	}
-	return
-}
-
-func elegantPair(x, y int64) (result uint64) {
-	a := biject(x)
-	b := biject(y)
-
-	if a >= b {
-		result = a*a + a + b
-	} else {
-		result = a + b*b
-	}
-	return
-}
-
 func NewFirestoreClient(ctx context.Context) (storage *HexStorageFirestore, err error) {
 	projectID := "robot-motel"
 
@@ -126,18 +105,62 @@ func newHexInfo(id string, doc *firestore.DocumentSnapshot) *HexInfo {
 }
 
 func (h *HexStorageFirestore) AddHexagonToMap(hexLocation *HexLocation) {
-	UnimplementedStorageControllerFunction()
+	ctx := context.Background()
 
+	id := Pair(hexLocation.X, hexLocation.Y)
+	result, err := h.hexMap.Doc(fmt.Sprintf("%d", id)).Set(ctx, map[string]interface{}{
+		"x":          hexLocation.X,
+		"y":          hexLocation.Y,
+		"hexID":      hexLocation.HexID,
+		"localData":  castToInterface(hexLocation.LocalData),
+		"globalData": castToInterface(hexLocation.GlobalData),
+	})
+	if err != nil {
+		glog.Errorf("%s\n%v", result, err)
+	}
 }
 
 func (h *HexStorageFirestore) GetHexagonFromMap(x int64, y int64) (hexLocation *HexLocation) {
-	UnimplementedStorageControllerFunction()
+	ctx := context.Background()
 
-	return
+	id := Pair(x, y)
+	docRef := h.hexMap.Doc(fmt.Sprintf("%d", id))
+	doc, err := docRef.Get(ctx)
+
+	if err != nil {
+		glog.Errorf("%v", err)
+		return nil
+	}
+
+	hexLocation = newHexLocation(id, doc)
+
+	return hexLocation
+}
+
+func newHexLocation(id int64, doc *firestore.DocumentSnapshot) *HexLocation {
+	x, y := Unpair(id)
+	hexLocation := &HexLocation{
+		X:         x,
+		Y:         y,
+		Z:         x - y,
+		HexID:     doc.Data()["hexID"].(string),
+		LocalData: castFromInterface(doc.Data()["localData"].(map[string]interface{})),
+	}
+
+	return hexLocation
+
 }
 
 func (h *HexStorageFirestore) DeleteHexagonFromMap(hexLocation *HexLocation) {
-	UnimplementedStorageControllerFunction()
+	ctx := context.Background()
+	id := Pair(hexLocation.X, hexLocation.Y)
+
+	result, err := h.hexMap.Doc(fmt.Sprintf("%d", id)).Delete(ctx)
+	if err != nil {
+		glog.Errorf("%s\n%v", result, err)
+	}
+
+	return
 
 }
 
@@ -162,8 +185,16 @@ func (h *HexStorageFirestore) SizeRepo() (count int) {
 	return
 }
 
-func (h *HexStorageFirestore) DeleteHexagonDataFromRepo(id string, key string) {
-	UnimplementedStorageControllerFunction()
+func (h *HexStorageFirestore) DeleteHexagonDataFromRepo(hexID string, key string) {
+	ctx := context.Background()
+
+	result, err := h.hexRepo.Doc(hexID).Update(ctx, []firestore.Update{
+		{Path: key, Value: firestore.Delete},
+	})
+
+	if err != nil {
+		glog.Errorf("%s\n%v", result, err)
+	}
 
 }
 
@@ -189,25 +220,70 @@ func (h *HexStorageFirestore) GetHexagonInfoData(hexID string, key string) (hexI
 }
 
 func (h *HexStorageFirestore) AddDataToMap(data *HexLocData) (err error) {
-	UnimplementedStorageControllerFunction()
+	ctx := context.Background()
+
+	id := Pair(data.X, data.Y)
+
+	result, err := h.hexMap.Doc(fmt.Sprintf("%d", id)).Update(ctx, []firestore.Update{
+		{
+			Path:  "localData." + data.DataKey,
+			Value: data.Value,
+		},
+	})
+
+	if err != nil {
+		glog.Errorf("%s\n%v", result, err)
+	}
 
 	return
 }
 
-func (h *HexStorageFirestore) MapUpdate(data *HexLocation) (err error) {
-	UnimplementedStorageControllerFunction()
+func (h *HexStorageFirestore) MapUpdate(hexLocation *HexLocation) (err error) {
+	ctx := context.Background()
+
+	id := Pair(hexLocation.X, hexLocation.Y)
+	result, err := h.hexMap.Doc(fmt.Sprintf("%d", id)).Set(ctx, map[string]interface{}{
+		"x":          hexLocation.X,
+		"y":          hexLocation.Y,
+		"hexID":      hexLocation.HexID,
+		"localData":  castToInterface(hexLocation.LocalData),
+		"globalData": castToInterface(hexLocation.GlobalData),
+	}, firestore.MergeAll)
+
+	if err != nil {
+		glog.Errorf("%s\n%v", result, err)
+	}
 
 	return
 }
 
 func (h *HexStorageFirestore) MapRemove(data *HexLocation) (err error) {
-	UnimplementedStorageControllerFunction()
+	ctx := context.Background()
+	id := Pair(data.X, data.Y)
+
+	result, err := h.hexMap.Doc(fmt.Sprintf("%d", id)).Delete(ctx)
+	if err != nil {
+		glog.Errorf("%s\n%v", result, err)
+	}
 
 	return
 }
 
-func (h *HexStorageFirestore) MapRemoveData(data *HexLocation) (err error) {
-	UnimplementedStorageControllerFunction()
+func (h *HexStorageFirestore) MapRemoveData(hexLocation *HexLocation) (err error) {
+	ctx := context.Background()
 
-	return
+	hexID := Pair(hexLocation.X, hexLocation.Y)
+
+	for key, _ := range hexLocation.LocalData {
+		result, err := h.hexMap.Doc(fmt.Sprintf("%d", hexID)).Update(ctx, []firestore.Update{
+			{Path: "localData." + key, Value: firestore.Delete},
+		})
+
+		if err != nil {
+			glog.Errorf("%s\n%v", result, err)
+			return err
+		}
+	}
+
+	return err
 }

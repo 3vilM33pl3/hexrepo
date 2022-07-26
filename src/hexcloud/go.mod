@@ -3,10 +3,10 @@ module hexcloud
 go 1.16
 
 require (
-	cloud.google.com/go/firestore v1.6.1 // indirect
+	cloud.google.com/go/firestore v1.6.1
 	github.com/golang/glog v1.0.0
-	github.com/google/go-cmp v0.5.6 // indirect
 	github.com/mattn/go-sqlite3 v1.14.12
+	github.com/spf13/cobra v1.5.0
 	golang.org/x/net v0.0.0-20210813160813-60bc85c4be6d // indirect
 	golang.org/x/sys v0.0.0-20211205182925-97ca703d548d // indirect
 	golang.org/x/text v0.3.7 // indirect

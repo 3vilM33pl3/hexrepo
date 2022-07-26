@@ -6,9 +6,9 @@ import (
 	"crypto/x509"
 	"errors"
 	"fmt"
-	"github.com/3vilm33pl3/hexcli/internal/pkg/hexcloud"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
+	"hexcloud/internal/pkg/hexcloud"
 	"io/ioutil"
 	"runtime"
 	"strings"
@@ -317,7 +317,7 @@ func (c *Client) Connect() (err error) {
 	return nil
 }
 
-var rootCert string = "-----BEGIN CERTIFICATE-----\n" +
+var rootCert = "-----BEGIN CERTIFICATE-----\n" +
 	"MIIDujCCAqKgAwIBAgILBAAAAAABD4Ym5g0wDQYJKoZIhvcNAQEFBQAwTDEgMB4G\n" +
 	"A1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjIxEzARBgNVBAoTCkdsb2JhbFNp\n" +
 	"Z24xEzARBgNVBAMTCkdsb2JhbFNpZ24wHhcNMDYxMjE1MDgwMDAwWhcNMjExMjE1\n" +

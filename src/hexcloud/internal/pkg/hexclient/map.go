@@ -2,9 +2,9 @@ package hexclient
 
 import (
 	"fmt"
-	"github.com/3vilm33pl3/hexcli/internal/pkg/hexcloud"
 	"github.com/golang/glog"
 	"github.com/spf13/cobra"
+	"hexcloud/internal/pkg/hexcloud"
 	"strconv"
 )
 

@@ -33,7 +33,7 @@ func init() {
 	repoCmd.AddCommand(repoAddCmd)
 	repoAddCmd.AddCommand(repoAddFileCmd)
 	repoAddCmd.AddCommand(repoAddDataCmd)
-	//repoAddDataCmd.AddCommand(repoAddDataFileCmd)
+	repoAddDataCmd.AddCommand(repoAddDataFileCmd)
 	repoCmd.AddCommand(repoGetCmd)
 	repoGetCmd.AddCommand(repoGetDataCmd)
 	repoCmd.AddCommand(repoDelCmd)

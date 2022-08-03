@@ -82,6 +82,48 @@ var repoAddFileCmd = &cobra.Command{
 	},
 }
 
+var repoAddDataFileCmd = &cobra.Command{
+	Use:   "file [filename]",
+	Short: "add hexagon from file [filename] to repository",
+	Run: func(cmd *cobra.Command, args []string) {
+		serverAddr, _ := cmd.Flags().GetString("addr")
+		secure, _ := cmd.Flags().GetBool("secure")
+
+		client, err := NewClient(serverAddr, secure)
+		var infoList hexcloud.HexInfoList
+
+		f, err := os.Open(args[0])
+		if err != nil {
+			fmt.Printf("Error opening file %s", args[0])
+			return
+		}
+		rc := bufio.NewReader(f)
+		csvLines, err := csv.NewReader(rc).ReadAll()
+		if err != nil {
+			log.Printf("Error reading hexdata file: %v", err)
+			return
+		}
+
+		for _, line := range csvLines {
+			data := make(map[string]string)
+			data[line[1]] = line[2]
+
+			hexInfo := &hexcloud.HexInfo{
+				ID:   line[0],
+				Data: data,
+			}
+			infoList.HexInfo = append(infoList.HexInfo, hexInfo)
+		}
+
+		err = client.RepoAddHexagonInfo(&infoList)
+		if err != nil {
+			fmt.Printf("Error connecting %s", err)
+			return
+		}
+
+	},
+}
+
 var repoAddDataCmd = &cobra.Command{
 	Use:   "data [ref] [key] [value]",
 	Short: "add data hexagon",

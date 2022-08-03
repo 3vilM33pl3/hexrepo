@@ -51,6 +51,9 @@ run-repo-del-data:
 run-map-add:
 	go run nb.go map add --secure=$(SECURE) --addr=$(ADDRESS) -- 0 -5 5 0000-0000-0000-0000
 
+run-map-add-file:
+	go run nb.go map add file hexmap.csv --secure=$(SECURE) --addr=$(ADDRESS)
+
 run-map-add-data:
 	go run nb.go map add data --secure=$(SECURE) --addr=$(ADDRESS) -- 0 -5 5 animal cat
 

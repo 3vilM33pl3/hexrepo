@@ -48,6 +48,10 @@ message HexLocData {
     string value = 5;
 }
 
+message HexLocDataList {
+    repeated HexLocData hexLocData = 1;
+}
+
 message Status {
     string msg = 1;
 }
@@ -65,7 +69,7 @@ service HexagonService {
     rpc RepoDelHexagonInfoData(HexIDData) returns(Result);
 
     rpc MapAdd(HexLocationList) returns (Result);
-    rpc MapAddData(HexLocData) returns (Result);
+    rpc MapAddData(HexLocDataList) returns (Result);
     rpc MapGet(HexagonGetRequest) returns (HexLocationList);
     rpc MapUpdate(HexLocation) returns (Result);
     rpc MapUpdateData(HexLocation) returns (Result);

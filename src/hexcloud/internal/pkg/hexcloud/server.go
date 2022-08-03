@@ -59,18 +59,22 @@ func (s *Server) MapRemoveData(ctx context.Context, data *HexLocation) (result *
 
 }
 
-func (s *Server) MapAddData(ctx context.Context, data *HexLocData) (result *Result, err error) {
-	err = s.Storage.AddDataToMap(data)
+func (s *Server) MapAddData(ctx context.Context, dataList *HexLocDataList) (result *Result, err error) {
 
-	if err != nil {
-		result = &Result{
-			Success: false,
-		}
-	} else {
-		result = &Result{
-			Success: true,
+	result = &Result{
+		Success: true,
+	}
+
+	for _, data := range dataList.HexLocData {
+		err = s.Storage.AddDataToMap(data)
+		if err != nil {
+			result = &Result{
+				Success: false,
+			}
+			return
 		}
 	}
+
 	return result, err
 }
 

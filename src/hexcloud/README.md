@@ -33,6 +33,12 @@ or
 hexcloud 
 ```
 
+### Insert data
+```shell
+go run .\cmd\hexcli\nb.go repo add file .\test\data_repo.csv --secure=false --addr=localhost:8080
+go run .\cmd\hexcli\nb.go repo add data file .\test\data_hexdata.csv --secure=false --addr=localhost:8080
+```
+
 ## Docker
 ```bash
 docker build -f ./deploy/hexcloud/Dockerfile -t hexcloud .

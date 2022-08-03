@@ -1,10 +1,14 @@
 package hexclient
 
 import (
+	"bufio"
+	"encoding/csv"
 	"fmt"
 	"github.com/golang/glog"
 	"github.com/spf13/cobra"
 	"hexcloud/internal/pkg/hexcloud"
+	"log"
+	"os"
 	"strconv"
 )
 
@@ -59,7 +63,7 @@ var mapAddCmd = &cobra.Command{
 	},
 }
 
-var mapAddData = &cobra.Command{
+var mapAddDataCmd = &cobra.Command{
 	Use:   "data [0,0,0] [key] [value]",
 	Short: "add data to map",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -78,10 +82,80 @@ var mapAddData = &cobra.Command{
 			Value:   args[4],
 		}
 
-		err = client.MapAddData(&hexLocData)
+		hexLocDataList := &hexcloud.HexLocDataList{}
+		hexLocDataList.HexLocData = append(hexLocDataList.HexLocData, &hexLocData)
+
+		err = client.MapAddData(hexLocDataList)
 
 		if err != nil {
 			glog.Errorf("%s\n", err)
+		}
+
+	},
+}
+
+var mapAddDataFileCmd = &cobra.Command{
+	Use:   "file [filename]",
+	Short: "add hexagon from file [filename] to repository",
+	Run: func(cmd *cobra.Command, args []string) {
+		serverAddr, _ := cmd.Flags().GetString("addr")
+		secure, _ := cmd.Flags().GetBool("secure")
+
+		client, err := NewClient(serverAddr, secure)
+		var infoList hexcloud.HexInfoList
+
+		f, err := os.Open(args[0])
+		if err != nil {
+			fmt.Printf("Error opening file %s", args[0])
+			return
+		}
+		rc := bufio.NewReader(f)
+		csvLines, err := csv.NewReader(rc).ReadAll()
+		if err != nil {
+			log.Printf("Error reading hexdata file: %v", err)
+			return
+		}
+
+		hexLocDataList := &hexcloud.HexLocDataList{}
+
+		for _, line := range csvLines {
+			x, err := strconv.ParseInt(line[0], 10, 64)
+			if err != nil {
+				glog.Errorf("x: %s\n", err)
+				return
+			}
+
+			y, err := strconv.ParseInt(line[1], 10, 64)
+			if err != nil {
+				glog.Errorf("y: %s\n", err)
+				return
+			}
+
+			z := -x - y
+
+			hexLocData := hexcloud.HexLocData{
+				X:       x,
+				Y:       y,
+				Z:       z,
+				DataKey: line[2],
+				Value:   line[3],
+			}
+
+			hexLocDataList.HexLocData = append(hexLocDataList.HexLocData, &hexLocData)
+
+		}
+
+		err = client.MapAddData(hexLocDataList)
+
+		if err != nil {
+			glog.Errorf("%s\n", err)
+			return
+		}
+
+		err = client.RepoAddHexagonInfo(&infoList)
+		if err != nil {
+			fmt.Printf("Error connecting %s", err)
+			return
 		}
 
 	},

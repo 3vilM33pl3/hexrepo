@@ -41,6 +41,7 @@ func init() {
 
 	rootCmd.AddCommand(mapCmd)
 	mapCmd.AddCommand(mapAddCmd)
+	mapAddCmd.AddCommand(mapAddFileCmd)
 	mapAddCmd.AddCommand(mapAddDataCmd)
 	mapAddDataCmd.AddCommand(mapAddDataFileCmd)
 	mapCmd.AddCommand(mapGetCmd)

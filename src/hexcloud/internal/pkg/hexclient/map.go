@@ -63,6 +63,70 @@ var mapAddCmd = &cobra.Command{
 	},
 }
 
+var mapAddFileCmd = &cobra.Command{
+	Use:   "file",
+	Short: "add hexagons included in the file",
+	Long: "Example: nb hex add file map.csv" +
+		"csv format:" +
+		"-2,2,0,0000-0000-0000-0001" +
+		"-1,2,-1,0000-0000-0000-0001",
+	Args: cobra.ArbitraryArgs,
+	Run: func(cmd *cobra.Command, args []string) {
+		serverAddr, _ := cmd.Flags().GetString("addr")
+		secure, _ := cmd.Flags().GetBool("secure")
+
+		client, err := NewClient(serverAddr, secure)
+
+		f, err := os.Open(args[0])
+		if err != nil {
+			fmt.Printf("Error opening file %s", args[0])
+			return
+		}
+		rc := bufio.NewReader(f)
+		csvLines, err := csv.NewReader(rc).ReadAll()
+		if err != nil {
+			log.Printf("Error reading hexdata file: %v", err)
+			return
+		}
+
+		hexLocList := &hexcloud.HexLocationList{}
+
+		for _, line := range csvLines {
+			x, err := strconv.ParseInt(line[0], 10, 64)
+			if err != nil {
+				glog.Errorf("x: %s\n", err)
+				return
+			}
+
+			y, err := strconv.ParseInt(line[1], 10, 64)
+			if err != nil {
+				glog.Errorf("y: %s\n", err)
+				return
+			}
+
+			z := -x - y
+
+			hex := &hexcloud.HexLocation{
+				X:     x,
+				Y:     y,
+				Z:     z,
+				HexID: line[3],
+			}
+
+			hexLocList.HexLoc = append(hexLocList.HexLoc, hex)
+
+		}
+
+		err = client.MapAdd(hexLocList)
+
+		if err != nil {
+			fmt.Printf("Error placing hexagon on map: %s", err)
+			return
+		}
+
+	},
+}
+
 var mapAddDataCmd = &cobra.Command{
 	Use:   "data [0,0,0] [key] [value]",
 	Short: "add data to map",

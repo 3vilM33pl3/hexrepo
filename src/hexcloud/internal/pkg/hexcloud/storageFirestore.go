@@ -25,13 +25,45 @@ type HexStorageFirestore struct {
 }
 
 func (h *HexStorageFirestore) DeleteAllHexagonsFromMap() (err error) {
-	//TODO implement me
-	panic("implement me")
+	iter := h.hexMap.Documents(context.Background())
+	numDeleted := 0
+
+	for {
+		doc, err := iter.Next()
+		if err != nil {
+			return err
+		}
+		_, err = doc.Ref.Delete(context.Background())
+		if err != nil {
+			return err
+		}
+		numDeleted++
+	}
+
+	glog.Infof("Deleted %d documents from map", numDeleted)
+
+	return nil
 }
 
 func (h *HexStorageFirestore) DeleteAllHexagonsFromRepo() (err error) {
-	//TODO implement me
-	panic("implement me")
+	iter := h.hexRepo.Documents(context.Background())
+	numDeleted := 0
+
+	for {
+		doc, err := iter.Next()
+		if err != nil {
+			return err
+		}
+		_, err = doc.Ref.Delete(context.Background())
+		if err != nil {
+			return err
+		}
+		numDeleted++
+	}
+
+	glog.Infof("Deleted %d documents from hexagon repo", numDeleted)
+
+	return nil
 }
 
 func NewFirestoreClient(ctx context.Context) (storage *HexStorageFirestore, err error) {

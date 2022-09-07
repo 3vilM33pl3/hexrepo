@@ -1,3 +1,4 @@
+[![HexWorld hexcom](https://github.com/3vilM33pl3/hexrepo/actions/workflows/build-hexcom.yml/badge.svg)](https://github.com/3vilM33pl3/hexrepo/actions/workflows/build-hexcom.yml)
 
 Hexcom is the client library which can be used to communicate with the [`hexcloud`](https://github.com/3vilM33pl3/hexcloud) backend.
 

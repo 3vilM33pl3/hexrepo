@@ -317,6 +317,38 @@ func (c *Client) Connect() (err error) {
 	return nil
 }
 
+func (c *Client) RepoDeleteAll() error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	result, err := c.grpcClient.RepoDelAllHexagonInfo(ctx, &hexcloud.Empty{})
+	if err != nil {
+		return err
+	}
+
+	if !result.Success {
+		return errors.New("unable to delete all")
+	}
+
+	return nil
+}
+
+func (c *Client) MapRemoveAll() error {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	result, err := c.grpcClient.MapRemoveAll(ctx, &hexcloud.Empty{})
+	if err != nil {
+		return err
+	}
+
+	if !result.Success {
+		return errors.New("unable to delete all")
+	}
+
+	return nil
+}
+
 var rootCert = "-----BEGIN CERTIFICATE-----\n" +
 	"MIIDujCCAqKgAwIBAgILBAAAAAABD4Ym5g0wDQYJKoZIhvcNAQEFBQAwTDEgMB4G\n" +
 	"A1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjIxEzARBgNVBAoTCkdsb2JhbFNp\n" +

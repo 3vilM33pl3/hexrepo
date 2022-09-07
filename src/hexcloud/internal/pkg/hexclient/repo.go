@@ -183,6 +183,29 @@ var repoDelCmd = &cobra.Command{
 	},
 }
 
+var repoDelAllCmd = &cobra.Command{
+	Use:   "all",
+	Short: "delete all hexagons from repository",
+	Run: func(cmd *cobra.Command, args []string) {
+		serverAddr, _ := cmd.Flags().GetString("addr")
+		secure, _ := cmd.Flags().GetBool("secure")
+
+		client, err := NewClient(serverAddr, secure)
+		var infoList hexcloud.HexIDList
+
+		for _, id := range args {
+			infoList.HexID = append(infoList.HexID, id)
+		}
+
+		err = client.RepoDeleteAll()
+
+		if err != nil {
+			fmt.Printf("Error connecting %s", err)
+			return
+		}
+	},
+}
+
 var repoDelDataCmd = &cobra.Command{
 	Use:   "data [ref]",
 	Short: "delete hexagon data from repository with reference [ref] and [key] ",

@@ -21,6 +21,8 @@ type HexStorage interface {
 	MapUpdate(data *HexLocation) (err error)
 	MapRemove(data *HexLocation) (err error)
 	MapRemoveData(data *HexLocation) (err error)
+	DeleteAllHexagonsFromMap() (err error)
+	DeleteAllHexagonsFromRepo() (err error)
 }
 
 func NewHexStorage(newdb bool, dbName string, example bool, remote bool) (storage HexStorage, err error) {

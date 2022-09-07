@@ -295,6 +295,23 @@ var mapRemoveCmd = &cobra.Command{
 	},
 }
 
+var mapRemoveAllCmd = &cobra.Command{
+	Use:   "all",
+	Short: "remove all hexagon from map",
+	Run: func(cmd *cobra.Command, args []string) {
+		serverAddr, _ := cmd.Flags().GetString("addr")
+		secure, _ := cmd.Flags().GetBool("secure")
+
+		client, err := NewClient(serverAddr, secure)
+		if err != nil {
+			return
+		}
+
+		err = client.MapRemoveAll()
+
+	},
+}
+
 var mapRemoveDataCmd = &cobra.Command{
 	Use:   "data",
 	Short: "remove hexagon data at `coord` [x,y,z] and [key]",

@@ -45,6 +45,9 @@ run-repo-del:
 run-repo-del-data:
 	go run nb.go repo del data 1000-0000-0000-0000 biome --secure=$(SECURE) --addr=$(ADDRESS)
 
+run-repo-del-all:
+	go run nb.go repo del all --secure=$(SECURE) --addr=$(ADDRESS)
+
 #
 # Map
 #
@@ -80,6 +83,9 @@ run-map-remove:
 
 run-map-remove-data:
 	go run nb.go map remove data --secure=$(SECURE) --addr=$(ADDRESS) -- 0 -5 5 animal
+
+run-map-remove-all:
+	go run nb.go map remove all --secure=$(SECURE) --addr=$(ADDRESS)
 
 #
 # Status

@@ -38,6 +38,7 @@ func init() {
 	repoGetCmd.AddCommand(repoGetDataCmd)
 	repoCmd.AddCommand(repoDelCmd)
 	repoDelCmd.AddCommand(repoDelDataCmd)
+	repoDelCmd.AddCommand(repoDelAllCmd)
 
 	rootCmd.AddCommand(mapCmd)
 	mapCmd.AddCommand(mapAddCmd)
@@ -49,6 +50,7 @@ func init() {
 	mapUpdateCmd.AddCommand(mapUpdateDataCmd)
 	mapCmd.AddCommand(mapRemoveCmd)
 	mapRemoveCmd.AddCommand(mapRemoveDataCmd)
+	mapRemoveCmd.AddCommand(mapRemoveAllCmd)
 
 	mapCmd.PersistentFlags().Int64P("radius", "r", 0, "radius of hexagon circle")
 

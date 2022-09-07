@@ -79,4 +79,8 @@ service HexagonService {
     rpc GetStatusServer(Empty) returns(Status);
     rpc GetStatusStorage(Empty) returns(Status);
     rpc GetStatusClients(Empty) returns(Status);
+
+    rpc RepoDelAllHexagonInfo(Empty) returns(Result);
+    rpc MapRemoveAll(Empty) returns(Result);
+    
 }

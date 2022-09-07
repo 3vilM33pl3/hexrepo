@@ -200,6 +200,30 @@ func (s *Server) MapRemove(ctx context.Context, hexLocationList *HexLocationList
 	return result, nil
 }
 
+func (s *Server) RepoDelAllHexagonInfo(context.Context, *Empty) (result *Result, err error) {
+	err = s.Storage.DeleteAllHexagonsFromRepo()
+
+	if err != nil {
+		result = &Result{Success: false}
+	} else {
+		result = &Result{Success: true}
+	}
+
+	result = &Result{Success: true}
+	return result, nil
+}
+func (s *Server) MapRemoveAll(context.Context, *Empty) (result *Result, err error) {
+	err = s.Storage.DeleteAllHexagonsFromMap()
+
+	if err != nil {
+		result = &Result{Success: false}
+	} else {
+		result = &Result{Success: true}
+	}
+
+	return result, nil
+}
+
 func (s *Server) GetStatusServer(context.Context, *Empty) (status *Status, err error) {
 	status = &Status{Msg: fmt.Sprintf("Server up and running")}
 	return

@@ -24,6 +24,16 @@ type HexStorageFirestore struct {
 	hexRepo *firestore.CollectionRef
 }
 
+func (h *HexStorageFirestore) DeleteAllHexagonsFromMap() (err error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (h *HexStorageFirestore) DeleteAllHexagonsFromRepo() (err error) {
+	//TODO implement me
+	panic("implement me")
+}
+
 func NewFirestoreClient(ctx context.Context) (storage *HexStorageFirestore, err error) {
 	projectID := "robot-motel"
 

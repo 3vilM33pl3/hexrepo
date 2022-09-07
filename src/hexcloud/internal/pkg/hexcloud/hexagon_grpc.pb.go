@@ -38,6 +38,8 @@ type HexagonServiceClient interface {
 	GetStatusServer(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Status, error)
 	GetStatusStorage(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Status, error)
 	GetStatusClients(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Status, error)
+	RepoDelAllHexagonInfo(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Result, error)
+	MapRemoveAll(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Result, error)
 }
 
 type hexagonServiceClient struct {
@@ -192,6 +194,24 @@ func (c *hexagonServiceClient) GetStatusClients(ctx context.Context, in *Empty, 
 	return out, nil
 }
 
+func (c *hexagonServiceClient) RepoDelAllHexagonInfo(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Result, error) {
+	out := new(Result)
+	err := c.cc.Invoke(ctx, "/HexagonService/RepoDelAllHexagonInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *hexagonServiceClient) MapRemoveAll(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Result, error) {
+	out := new(Result)
+	err := c.cc.Invoke(ctx, "/HexagonService/MapRemoveAll", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // HexagonServiceServer is the server API for HexagonService service.
 // All implementations must embed UnimplementedHexagonServiceServer
 // for forward compatibility
@@ -212,6 +232,8 @@ type HexagonServiceServer interface {
 	GetStatusServer(context.Context, *Empty) (*Status, error)
 	GetStatusStorage(context.Context, *Empty) (*Status, error)
 	GetStatusClients(context.Context, *Empty) (*Status, error)
+	RepoDelAllHexagonInfo(context.Context, *Empty) (*Result, error)
+	MapRemoveAll(context.Context, *Empty) (*Result, error)
 	mustEmbedUnimplementedHexagonServiceServer()
 }
 
@@ -266,6 +288,12 @@ func (UnimplementedHexagonServiceServer) GetStatusStorage(context.Context, *Empt
 }
 func (UnimplementedHexagonServiceServer) GetStatusClients(context.Context, *Empty) (*Status, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetStatusClients not implemented")
+}
+func (UnimplementedHexagonServiceServer) RepoDelAllHexagonInfo(context.Context, *Empty) (*Result, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RepoDelAllHexagonInfo not implemented")
+}
+func (UnimplementedHexagonServiceServer) MapRemoveAll(context.Context, *Empty) (*Result, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MapRemoveAll not implemented")
 }
 func (UnimplementedHexagonServiceServer) mustEmbedUnimplementedHexagonServiceServer() {}
 
@@ -568,6 +596,42 @@ func _HexagonService_GetStatusClients_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _HexagonService_RepoDelAllHexagonInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(HexagonServiceServer).RepoDelAllHexagonInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/HexagonService/RepoDelAllHexagonInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(HexagonServiceServer).RepoDelAllHexagonInfo(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _HexagonService_MapRemoveAll_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(HexagonServiceServer).MapRemoveAll(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/HexagonService/MapRemoveAll",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(HexagonServiceServer).MapRemoveAll(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // HexagonService_ServiceDesc is the grpc.ServiceDesc for HexagonService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -638,6 +702,14 @@ var HexagonService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetStatusClients",
 			Handler:    _HexagonService_GetStatusClients_Handler,
+		},
+		{
+			MethodName: "RepoDelAllHexagonInfo",
+			Handler:    _HexagonService_RepoDelAllHexagonInfo_Handler,
+		},
+		{
+			MethodName: "MapRemoveAll",
+			Handler:    _HexagonService_MapRemoveAll_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

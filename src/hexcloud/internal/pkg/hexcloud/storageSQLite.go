@@ -489,3 +489,73 @@ func (h *HexStorageSQLite) MapRemoveData(data *HexLocation) (err error) {
 	}
 	return
 }
+
+func (h *HexStorageSQLite) DeleteAllHexagonsFromMap() (err error) {
+	sqlDeleteMap := "DELETE FROM hexmap;"
+	sqlDeleteMapData := "DELETE FROM mapdata;"
+	glog.Infof("%s\n%s\n", sqlDeleteMap, sqlDeleteMapData)
+
+	ctx := context.Background()
+	tx, err := h.Database.BeginTx(ctx, nil)
+	if err != nil {
+		glog.Errorf("Error deleting map %s", err)
+		return err
+	}
+
+	_, err = tx.ExecContext(ctx, sqlDeleteMapData)
+	if err != nil {
+		glog.Errorf("Error deleting map data %s", err)
+		tx.Rollback()
+		return err
+	}
+
+	_, err = tx.ExecContext(ctx, sqlDeleteMap)
+	if err != nil {
+		glog.Errorf("Error deleting map %s", err)
+		tx.Rollback()
+		return err
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		glog.Errorf("Error deleting map %s", err)
+		return err
+	}
+
+	return nil
+}
+
+func (h *HexStorageSQLite) DeleteAllHexagonsFromRepo() (err error) {
+	sqlDeleteRepo := "DELETE FROM hexrepo;"
+	sqlDeleteRepoData := "DELETE FROM hexdata;"
+	glog.Infof("%s\n%s\n", sqlDeleteRepo, sqlDeleteRepoData)
+
+	ctx := context.Background()
+	tx, err := h.Database.BeginTx(ctx, nil)
+	if err != nil {
+		glog.Errorf("Error deleting map %s", err)
+		return err
+	}
+
+	_, err = tx.ExecContext(ctx, sqlDeleteRepoData)
+	if err != nil {
+		glog.Errorf("Error deleting repo data %s", err)
+		tx.Rollback()
+		return err
+	}
+
+	_, err = tx.ExecContext(ctx, sqlDeleteRepo)
+	if err != nil {
+		glog.Errorf("Error deleting repo %s", err)
+		tx.Rollback()
+		return err
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		glog.Errorf("Error deleting repo %s", err)
+		return err
+	}
+
+	return nil
+}

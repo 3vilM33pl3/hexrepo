@@ -19,19 +19,28 @@ run-help-map:
 	go run nb.go map -h
 
 #
+# Add data
+#
+run-repo-add-file:
+	go run nb.go repo add file ../../test/data_repo.csv --secure=$(SECURE) --addr=$(ADDRESS)
+
+run-repo-add-data-file:
+	go run nb.go repo add data file ../../test/data_hexdata.csv --secure=$(SECURE) --addr=$(ADDRESS)
+
+run-map-add-file:
+	go run nb.go map add file ../../test/data_hexmap.csv --secure=$(SECURE) --addr=$(ADDRESS)
+
+run-map-add-data-file:
+	go run nb.go map add data file ../../test/data_mapdata.csv --secure=$(SECURE) --addr=$(ADDRESS)
+
+#
 # Repository
 #
 run-repo-add:
 	go run nb.go repo add 1000-0000-0000-0000 --secure=$(SECURE) --addr=$(ADDRESS)
 
-run-repo-add-file:
-	go run nb.go repo add file hexagons.csv --secure=$(SECURE) --addr=$(ADDRESS)
-
 run-repo-add-data:
 	go run nb.go repo add data 1000-0000-0000-0000 biome swamp --secure=$(SECURE) --addr=$(ADDRESS)
-
-run-repo-add-data-file:
-	go run nb.go repo add data file hexagon_data.csv --secure=$(SECURE) --addr=$(ADDRESS)
 
 run-repo-get:
 	go run nb.go repo get 1000-0000-0000-0000 --secure=$(SECURE) --addr=$(ADDRESS)
@@ -53,9 +62,6 @@ run-repo-del-all:
 #
 run-map-add:
 	go run nb.go map add --secure=$(SECURE) --addr=$(ADDRESS) -- 0 -5 5 0000-0000-0000-0000
-
-run-map-add-file:
-	go run nb.go map add file hexmap.csv --secure=$(SECURE) --addr=$(ADDRESS)
 
 run-map-add-data:
 	go run nb.go map add data --secure=$(SECURE) --addr=$(ADDRESS) -- 0 -5 5 animal cat

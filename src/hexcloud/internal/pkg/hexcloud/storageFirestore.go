@@ -153,6 +153,7 @@ func (h *HexStorageFirestore) AddHexagonToMap(hexLocation *HexLocation) {
 	result, err := h.hexMap.Doc(fmt.Sprintf("%d", id)).Set(ctx, map[string]interface{}{
 		"x":          hexLocation.X,
 		"y":          hexLocation.Y,
+		"z":          hexLocation.Z,
 		"hexID":      hexLocation.HexID,
 		"localData":  castToInterface(hexLocation.LocalData),
 		"globalData": castToInterface(hexLocation.GlobalData),

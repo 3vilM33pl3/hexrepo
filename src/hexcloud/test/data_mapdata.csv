@@ -17,3 +17,11 @@
 0,-1,direction,SW
 -1,0,direction,S
 0,0,direction,SE
+0,1,link,-1:1
+-1,1,link,-1:0
+-1,0,link,0:-1
+0,-1,link,1:-1
+1,-1,link,1:0
+1,0,link,0:1
+
+

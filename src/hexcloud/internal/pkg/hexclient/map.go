@@ -10,6 +10,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"strings"
 )
 
 var mapCmd = &cobra.Command{
@@ -146,6 +147,16 @@ var mapAddDataCmd = &cobra.Command{
 			Value:   args[4],
 		}
 
+		if len(args) > 4 {
+			xi, err := strconv.ParseInt(args[4], 10, 64)
+			if err == nil {
+				yi, err := strconv.ParseInt(args[4], 10, 64)
+				if err == nil {
+					hexLocData.Value = strconv.FormatInt(hexcloud.Pair(xi, yi), 10)
+				}
+			}
+		}
+
 		hexLocDataList := &hexcloud.HexLocDataList{}
 		hexLocDataList.HexLocData = append(hexLocDataList.HexLocData, &hexLocData)
 
@@ -203,6 +214,17 @@ var mapAddDataFileCmd = &cobra.Command{
 				Z:       z,
 				DataKey: line[2],
 				Value:   line[3],
+			}
+
+			if hexLocData.DataKey == "link" {
+				coords := strings.Split(hexLocData.Value, ":")
+				xi, err := strconv.ParseInt(coords[0], 10, 64)
+				if err == nil {
+					yi, err := strconv.ParseInt(coords[1], 10, 64)
+					if err == nil {
+						hexLocData.Value = strconv.FormatInt(hexcloud.Pair(xi, yi), 10)
+					}
+				}
 			}
 
 			hexLocDataList.HexLocData = append(hexLocDataList.HexLocData, &hexLocData)

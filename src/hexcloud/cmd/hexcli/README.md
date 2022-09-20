@@ -19,7 +19,9 @@ Command line interface to manipulate game content
 
 ### Adding/deleting/updating hexagons on map
     nb map add [0,0,0] [ref]
-    nb map add data [0,0,0] [key [value]
+    nb map add file [file.csv]
+    nb map add data [0,0,0] [key] [value]
+    nb map add data file [file.csv]
     nb map get [0,0,0]
     nb map get data [0,0,0] [key]
     nb map update [0,0,0] [ref]
@@ -27,7 +29,16 @@ Command line interface to manipulate game content
     nb map del [0,0,0]
     nb map del data [0,0,0]
     nb map del data all
-    
+
+#### CSV data file example      
+    -1,0,direction,S
+    0,0,direction,SE
+    0,1,link,-1:1
+    -1,1,link,-1:0
+
+The `link` keyword is used to link hexagons together (unidirectional). 
+The value is the x and y coordinates of the linked hexagon separated by a colon. 
+
 ### Status hexagon network (storage server, meta data server, connected clients)
     nb status server
     nb status storage

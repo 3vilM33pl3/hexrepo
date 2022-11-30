@@ -1,4 +1,4 @@
-module hexcloud
+module github.com/3vilM33pl3/hexrepo/src/hexcloud
 
 go 1.16
 

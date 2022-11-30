@@ -2,9 +2,9 @@ package main
 
 import (
 	"flag"
+	"github.com/3vilM33pl3/hexrepo/src/hexcloud/internal/pkg/hexcloud"
 	"github.com/golang/glog"
 	"google.golang.org/grpc"
-	"hexcloud/internal/pkg/hexcloud"
 	"net"
 	"os"
 )

@@ -1,24 +1,34 @@
 package hexgraph
 
 import (
+	"github.com/3vilM33pl3/hexrepo/src/hexcloud/pkg/hexgrid"
 	"github.com/dominikbraun/graph"
 	"strconv"
 )
 
 type Hex struct {
-	ID int
-	X  int
-	Y  int
-	Z  int
+	ID int64
+	X  int64
+	Y  int64
+	Z  int64
 }
 
-func NewMap() graph.Graph[string, Hex] {
+type Map struct {
+	Name       string
+	HexGraph   *graph.Graph[string, Hex]
+	RiverGraph *graph.Graph[string, Hex]
+}
+
+func NewMap(name string) Map {
 	hexHash := func(h Hex) string {
-		return strconv.Itoa(h.ID)
+		return strconv.FormatInt(h.ID, 10)
 	}
 
-	g := graph.New(hexHash, graph.Directed(), graph.Acyclic())
-	_ = g.AddVertex(Hex{ID: 1, X: 0, Y: 0, Z: 0})
+	hexG := graph.New(hexHash)
+	_ = hexG.AddVertex(Hex{ID: hexgrid.Pair(0, 0), X: 0, Y: 0, Z: 0})
 
-	return g
+	riverG := graph.New(hexHash, graph.Directed())
+	_ = riverG.AddVertex(Hex{ID: hexgrid.Pair(0, 0), X: 0, Y: 0, Z: 0})
+
+	return Map{name, &hexG, &riverG}
 }

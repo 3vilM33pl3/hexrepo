@@ -4,9 +4,10 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"github.com/3vilM33pl3/hexrepo/src/hexcloud/pkg/hexgrid"
 	"github.com/golang/glog"
 	_ "github.com/mattn/go-sqlite3"
-	"hexcloud/pkg/hexgrid"
+
 	"io/ioutil"
 	"os"
 )

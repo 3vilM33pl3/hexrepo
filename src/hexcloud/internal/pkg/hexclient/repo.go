@@ -4,8 +4,8 @@ import (
 	"bufio"
 	"encoding/csv"
 	"fmt"
+	"github.com/3vilM33pl3/hexrepo/src/hexcloud/internal/pkg/hexcloud"
 	"github.com/spf13/cobra"
-	"hexcloud/internal/pkg/hexcloud"
 	"log"
 	"os"
 )

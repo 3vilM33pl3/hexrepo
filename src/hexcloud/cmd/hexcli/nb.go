@@ -1,6 +1,6 @@
 package main
 
-import "hexcloud/internal/pkg/hexclient"
+import "github.com/3vilM33pl3/hexrepo/src/hexcloud/internal/pkg/hexclient"
 
 func main() {
 	hexclient.Execute()

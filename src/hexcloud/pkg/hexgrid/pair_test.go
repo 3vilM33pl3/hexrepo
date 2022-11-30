@@ -1,4 +1,4 @@
-package hexcloud
+package hexgrid
 
 import "testing"
 

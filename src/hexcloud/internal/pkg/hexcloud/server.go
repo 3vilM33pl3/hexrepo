@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/golang/glog"
-	"hexcloud/internal/pkg/hexgrid"
+	"hexcloud/pkg/hexgrid"
 )
 
 type Server struct {

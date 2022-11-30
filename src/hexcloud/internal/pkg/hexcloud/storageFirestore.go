@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/golang/glog"
+	"hexcloud/pkg/hexgrid"
 	"log"
 	"runtime"
 )
@@ -149,7 +150,7 @@ func newHexInfo(id string, doc *firestore.DocumentSnapshot) *HexInfo {
 func (h *HexStorageFirestore) AddHexagonToMap(hexLocation *HexLocation) {
 	ctx := context.Background()
 
-	id := Pair(hexLocation.X, hexLocation.Y)
+	id := hexgrid.Pair(hexLocation.X, hexLocation.Y)
 	result, err := h.hexMap.Doc(fmt.Sprintf("%d", id)).Set(ctx, map[string]interface{}{
 		"x":          hexLocation.X,
 		"y":          hexLocation.Y,
@@ -166,7 +167,7 @@ func (h *HexStorageFirestore) AddHexagonToMap(hexLocation *HexLocation) {
 func (h *HexStorageFirestore) GetHexagonFromMap(x int64, y int64) (hexLocation *HexLocation) {
 	ctx := context.Background()
 
-	id := Pair(x, y)
+	id := hexgrid.Pair(x, y)
 	docRef := h.hexMap.Doc(fmt.Sprintf("%d", id))
 	doc, err := docRef.Get(ctx)
 
@@ -181,7 +182,7 @@ func (h *HexStorageFirestore) GetHexagonFromMap(x int64, y int64) (hexLocation *
 }
 
 func newHexLocation(id int64, doc *firestore.DocumentSnapshot) *HexLocation {
-	x, y := Unpair(id)
+	x, y := hexgrid.Unpair(id)
 	hexLocation := &HexLocation{
 		X:         x,
 		Y:         y,
@@ -196,7 +197,7 @@ func newHexLocation(id int64, doc *firestore.DocumentSnapshot) *HexLocation {
 
 func (h *HexStorageFirestore) DeleteHexagonFromMap(hexLocation *HexLocation) {
 	ctx := context.Background()
-	id := Pair(hexLocation.X, hexLocation.Y)
+	id := hexgrid.Pair(hexLocation.X, hexLocation.Y)
 
 	result, err := h.hexMap.Doc(fmt.Sprintf("%d", id)).Delete(ctx)
 	if err != nil {
@@ -265,7 +266,7 @@ func (h *HexStorageFirestore) GetHexagonInfoData(hexID string, key string) (hexI
 func (h *HexStorageFirestore) AddDataToMap(data *HexLocData) (err error) {
 	ctx := context.Background()
 
-	id := Pair(data.X, data.Y)
+	id := hexgrid.Pair(data.X, data.Y)
 
 	result, err := h.hexMap.Doc(fmt.Sprintf("%d", id)).Update(ctx, []firestore.Update{
 		{
@@ -284,7 +285,7 @@ func (h *HexStorageFirestore) AddDataToMap(data *HexLocData) (err error) {
 func (h *HexStorageFirestore) MapUpdate(hexLocation *HexLocation) (err error) {
 	ctx := context.Background()
 
-	id := Pair(hexLocation.X, hexLocation.Y)
+	id := hexgrid.Pair(hexLocation.X, hexLocation.Y)
 	result, err := h.hexMap.Doc(fmt.Sprintf("%d", id)).Set(ctx, map[string]interface{}{
 		"x":          hexLocation.X,
 		"y":          hexLocation.Y,
@@ -302,7 +303,7 @@ func (h *HexStorageFirestore) MapUpdate(hexLocation *HexLocation) (err error) {
 
 func (h *HexStorageFirestore) MapRemove(data *HexLocation) (err error) {
 	ctx := context.Background()
-	id := Pair(data.X, data.Y)
+	id := hexgrid.Pair(data.X, data.Y)
 
 	result, err := h.hexMap.Doc(fmt.Sprintf("%d", id)).Delete(ctx)
 	if err != nil {
@@ -315,7 +316,7 @@ func (h *HexStorageFirestore) MapRemove(data *HexLocation) (err error) {
 func (h *HexStorageFirestore) MapRemoveData(hexLocation *HexLocation) (err error) {
 	ctx := context.Background()
 
-	hexID := Pair(hexLocation.X, hexLocation.Y)
+	hexID := hexgrid.Pair(hexLocation.X, hexLocation.Y)
 
 	for key, _ := range hexLocation.LocalData {
 		result, err := h.hexMap.Doc(fmt.Sprintf("%d", hexID)).Update(ctx, []firestore.Update{

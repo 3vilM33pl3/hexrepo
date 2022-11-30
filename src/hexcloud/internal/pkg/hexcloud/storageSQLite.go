@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/golang/glog"
 	_ "github.com/mattn/go-sqlite3"
+	"hexcloud/pkg/hexgrid"
 	"io/ioutil"
 	"os"
 )
@@ -176,7 +177,7 @@ func (h *HexStorageSQLite) AddHexagonToMap(hexLocation *HexLocation) {
 		return
 	}
 
-	sql := fmt.Sprintf("INSERT INTO hexmap VALUES('%d', '%d', '%d', '%d', '%s');", Pair(hexLocation.X, hexLocation.Y), hexLocation.X, hexLocation.Y, hexLocation.Z, hexLocation.HexID)
+	sql := fmt.Sprintf("INSERT INTO hexmap VALUES('%d', '%d', '%d', '%d', '%s');", hexgrid.Pair(hexLocation.X, hexLocation.Y), hexLocation.X, hexLocation.Y, hexLocation.Z, hexLocation.HexID)
 	glog.Infof("%s\n", sql)
 	_, err = tx.ExecContext(ctx, sql)
 	if err != nil {
@@ -186,7 +187,7 @@ func (h *HexStorageSQLite) AddHexagonToMap(hexLocation *HexLocation) {
 	}
 
 	for key, element := range hexLocation.GetLocalData() {
-		sql := fmt.Sprintf("INSERT INTO mapdata VALUES('%d', '%s', '%s');", Pair(hexLocation.X, hexLocation.Y), key, element)
+		sql := fmt.Sprintf("INSERT INTO mapdata VALUES('%d', '%s', '%s');", hexgrid.Pair(hexLocation.X, hexLocation.Y), key, element)
 		glog.Infof("%s\n", sql)
 		_, err := tx.ExecContext(ctx, sql)
 		if err != nil {
@@ -203,7 +204,7 @@ func (h *HexStorageSQLite) AddHexagonToMap(hexLocation *HexLocation) {
 }
 
 func (h *HexStorageSQLite) GetHexagonFromMap(x int64, y int64) (hexLocation *HexLocation) {
-	sql := fmt.Sprintf("SELECT * FROM hexmap WHERE id = '%d';", Pair(x, y))
+	sql := fmt.Sprintf("SELECT * FROM hexmap WHERE id = '%d';", hexgrid.Pair(x, y))
 	glog.Infof("%s\n", sql)
 	rows, err := h.Database.Query(sql)
 	defer rows.Close()
@@ -225,7 +226,7 @@ func (h *HexStorageSQLite) GetHexagonFromMap(x int64, y int64) (hexLocation *Hex
 		return
 	}
 
-	sql = fmt.Sprintf("SELECT key, value FROM mapdata WHERE id='%d';", Pair(x, y))
+	sql = fmt.Sprintf("SELECT key, value FROM mapdata WHERE id='%d';", hexgrid.Pair(x, y))
 	glog.Infof("%s\n", sql)
 	rows, err = h.Database.Query(sql)
 	if err != nil {
@@ -265,7 +266,7 @@ func (h *HexStorageSQLite) DeleteHexagonFromMap(hexLocation *HexLocation) {
 		return
 	}
 
-	sql := fmt.Sprintf("DELETE FROM mapdata WHERE id = '%d';", Pair(hexLocation.X, hexLocation.Y))
+	sql := fmt.Sprintf("DELETE FROM mapdata WHERE id = '%d';", hexgrid.Pair(hexLocation.X, hexLocation.Y))
 	glog.Infof("%s\n", sql)
 	_, err = tx.ExecContext(ctx, sql)
 	if err != nil {
@@ -274,7 +275,7 @@ func (h *HexStorageSQLite) DeleteHexagonFromMap(hexLocation *HexLocation) {
 		return
 	}
 
-	sql = fmt.Sprintf("DELETE FROM hexmap WHERE id = '%d';", Pair(hexLocation.X, hexLocation.Y))
+	sql = fmt.Sprintf("DELETE FROM hexmap WHERE id = '%d';", hexgrid.Pair(hexLocation.X, hexLocation.Y))
 	glog.Infof("%s\n", sql)
 	_, err = tx.ExecContext(ctx, sql)
 	if err != nil {
@@ -373,7 +374,7 @@ func (h *HexStorageSQLite) GetHexagonInfoData(id string, key string) (hexIDData 
 }
 
 func (h *HexStorageSQLite) AddDataToMap(data *HexLocData) (err error) {
-	sql := fmt.Sprintf("INSERT INTO mapdata (id, key, value) VALUES('%d', '%s', '%s');", Pair(data.X, data.Y), data.DataKey, data.Value)
+	sql := fmt.Sprintf("INSERT INTO mapdata (id, key, value) VALUES('%d', '%s', '%s');", hexgrid.Pair(data.X, data.Y), data.DataKey, data.Value)
 	glog.Infof("%s\n", sql)
 
 	ctx := context.Background()
@@ -409,7 +410,7 @@ func (h *HexStorageSQLite) MapUpdate(data *HexLocation) (err error) {
 	}
 
 	if data.HexID != "" {
-		sql := fmt.Sprintf("UPDATE hexmap SET hexid = '%s' WHERE id='%d';", data.HexID, Pair(data.X, data.Y))
+		sql := fmt.Sprintf("UPDATE hexmap SET hexid = '%s' WHERE id='%d';", data.HexID, hexgrid.Pair(data.X, data.Y))
 		_, err = tx.ExecContext(ctx, sql)
 		if err != nil {
 			glog.Errorf("Warning: %s - %s\n", sql, err)
@@ -419,7 +420,7 @@ func (h *HexStorageSQLite) MapUpdate(data *HexLocation) (err error) {
 	}
 
 	for key, value := range data.LocalData {
-		sql := fmt.Sprintf("INSERT OR REPLACE INTO mapdata(id, key,value) VALUES('%d','%s','%s');", Pair(data.X, data.Y), key, value)
+		sql := fmt.Sprintf("INSERT OR REPLACE INTO mapdata(id, key,value) VALUES('%d','%s','%s');", hexgrid.Pair(data.X, data.Y), key, value)
 		_, err = tx.ExecContext(ctx, sql)
 		if err != nil {
 			glog.Errorf("Warning: %s - %s\n", sql, err)
@@ -447,7 +448,7 @@ func (h *HexStorageSQLite) MapRemove(data *HexLocation) (err error) {
 	}
 
 	if data.HexID != "" {
-		sql := fmt.Sprintf("DELETE FROM hexmap WHERE id='%d'", Pair(data.X, data.Y))
+		sql := fmt.Sprintf("DELETE FROM hexmap WHERE id='%d'", hexgrid.Pair(data.X, data.Y))
 		_, err = tx.ExecContext(ctx, sql)
 		if err != nil {
 			glog.Errorf("Warning: %s - %s\n", sql, err)
@@ -475,7 +476,7 @@ func (h *HexStorageSQLite) MapRemoveData(data *HexLocation) (err error) {
 	}
 
 	for key, value := range data.LocalData {
-		sql := fmt.Sprintf("DELETE FROM mapdata WHERE id='%d' AND key='%s' AND value='%s';", Pair(data.X, data.Y), key, value)
+		sql := fmt.Sprintf("DELETE FROM mapdata WHERE id='%d' AND key='%s' AND value='%s';", hexgrid.Pair(data.X, data.Y), key, value)
 		_, err = tx.ExecContext(ctx, sql)
 		if err != nil {
 			glog.Errorf("Error Updating data on %d %d %d %s\n", data.X, data.Y, data.Z, key)

@@ -7,6 +7,7 @@ import (
 	"github.com/golang/glog"
 	"github.com/spf13/cobra"
 	"hexcloud/internal/pkg/hexcloud"
+	"hexcloud/pkg/hexgrid"
 	"log"
 	"os"
 	"strconv"
@@ -152,7 +153,7 @@ var mapAddDataCmd = &cobra.Command{
 			if err == nil {
 				yi, err := strconv.ParseInt(args[4], 10, 64)
 				if err == nil {
-					hexLocData.Value = strconv.FormatInt(hexcloud.Pair(xi, yi), 10)
+					hexLocData.Value = strconv.FormatInt(hexgrid.Pair(xi, yi), 10)
 				}
 			}
 		}
@@ -222,7 +223,7 @@ var mapAddDataFileCmd = &cobra.Command{
 				if err == nil {
 					yi, err := strconv.ParseInt(coords[1], 10, 64)
 					if err == nil {
-						hexLocData.Value = strconv.FormatInt(hexcloud.Pair(xi, yi), 10)
+						hexLocData.Value = strconv.FormatInt(hexgrid.Pair(xi, yi), 10)
 					}
 				}
 			}

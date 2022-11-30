@@ -3,8 +3,8 @@ package hexcloud
 import (
 	"context"
 	"fmt"
+	"github.com/3vilM33pl3/hexrepo/src/hexcloud/pkg/hexgrid"
 	"github.com/golang/glog"
-	"hexcloud/pkg/hexgrid"
 )
 
 type Server struct {

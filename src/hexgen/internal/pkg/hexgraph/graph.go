@@ -3,7 +3,8 @@ package hexgraph
 import (
 	"github.com/3vilM33pl3/hexrepo/src/hexcloud/pkg/hexgrid"
 	"github.com/dominikbraun/graph"
-	"strconv"
+	"github.com/dominikbraun/graph/draw"
+	"os"
 )
 
 type Hex struct {
@@ -15,20 +16,48 @@ type Hex struct {
 
 type Map struct {
 	Name       string
-	HexGraph   *graph.Graph[string, Hex]
-	RiverGraph *graph.Graph[string, Hex]
+	HexGraph   graph.Graph[int64, Hex]
+	RiverGraph graph.Graph[int64, Hex]
 }
 
 func NewMap(name string) Map {
-	hexHash := func(h Hex) string {
-		return strconv.FormatInt(h.ID, 10)
+	hexHash := func(h Hex) int64 {
+		return h.ID
 	}
 
 	hexG := graph.New(hexHash)
-	_ = hexG.AddVertex(Hex{ID: hexgrid.Pair(0, 0), X: 0, Y: 0, Z: 0})
-
 	riverG := graph.New(hexHash, graph.Directed())
-	_ = riverG.AddVertex(Hex{ID: hexgrid.Pair(0, 0), X: 0, Y: 0, Z: 0})
 
-	return Map{name, &hexG, &riverG}
+	return Map{name, hexG, riverG}
+}
+
+func (m *Map) Generate(size int) {
+
+	m.HexGraph.AddVertex(Hex{ID: hexgrid.Pair(0, 0), X: 0, Y: 0, Z: 0})
+	m.RiverGraph.AddVertex(Hex{ID: hexgrid.Pair(0, 0), X: 0, Y: 0, Z: 0})
+
+	for i := 1; i <= size; i++ {
+		hexes := hexgrid.Ring(hexgrid.NewHexXYZ(0, 0, 0), int64(i))
+
+		for _, hex := range hexes {
+			m.HexGraph.AddVertex(Hex{ID: hexgrid.Pair(hex.X, hex.Y), X: hex.X, Y: hex.Y, Z: hex.Z})
+		}
+
+		for _, hex := range hexes {
+			neighbours := hexgrid.Ring(hexgrid.NewHexXYZ(hex.X, hex.Y, -hex.X-hex.Y), 1)
+			for _, neighbour := range neighbours {
+				nb, err := m.HexGraph.Vertex(hexgrid.Pair(neighbour.X, neighbour.Y))
+				if err != nil {
+					continue
+				}
+				m.HexGraph.AddEdge(hexgrid.Pair(hex.X, hex.Y), nb.ID)
+			}
+		}
+	}
+
+}
+
+func (m *Map) DOT() {
+	file, _ := os.Create("./mygraph.gv")
+	_ = draw.DOT(m.HexGraph, file)
 }

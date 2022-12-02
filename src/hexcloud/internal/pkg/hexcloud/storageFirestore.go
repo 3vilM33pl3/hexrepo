@@ -186,7 +186,7 @@ func newHexLocation(id int64, doc *firestore.DocumentSnapshot) *HexLocation {
 	hexLocation := &HexLocation{
 		X:         x,
 		Y:         y,
-		Z:         x - y,
+		Z:         -x - y,
 		HexID:     doc.Data()["hexID"].(string),
 		LocalData: castFromInterface(doc.Data()["localData"].(map[string]interface{})),
 	}

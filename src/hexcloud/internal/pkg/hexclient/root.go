@@ -1,6 +1,5 @@
 /*
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
 */
 package hexclient
 
@@ -26,8 +25,11 @@ func init() {
 	flag.Parse()
 	flag.Lookup("logtostderr").Value.Set("true")
 
-	rootCmd.PersistentFlags().BoolP("secure", "s", true, "secure connection")
-	rootCmd.PersistentFlags().StringP("addr", "a", "localhost:8080", "server address")
+	repoCmd.PersistentFlags().BoolP("secure", "s", true, "secure connection")
+	repoCmd.PersistentFlags().StringP("addr", "a", "localhost:8080", "server address")
+
+	mapCmd.PersistentFlags().BoolP("secure", "s", true, "secure connection")
+	mapCmd.PersistentFlags().StringP("addr", "a", "localhost:8080", "server address")
 
 	rootCmd.AddCommand(repoCmd)
 	repoCmd.AddCommand(repoAddCmd)
@@ -58,5 +60,8 @@ func init() {
 	hexStatusCmd.AddCommand(hexStatusServerCmd)
 	hexStatusCmd.AddCommand(hexStatusStorageCmd)
 	hexStatusCmd.AddCommand(hexStatusClientCmd)
+
+	rootCmd.AddCommand(pairCmd)
+	rootCmd.AddCommand(unPairCmd)
 
 }

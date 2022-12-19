@@ -1,4 +1,4 @@
- # Overview
+# Overview
 Command line interface to manipulate game content
 
 ## Commands
@@ -9,17 +9,15 @@ Command line interface to manipulate game content
 
 ### Hexagon manipulation
     nb repo add [ref]
-    nb repo add file [file.csv]
     nb repo add data [ref] [key] [value]
     nb repo add data file [file.csv]
     nb repo get [ref]
     nb repo del [ref]
     nb repo del data [ref] [key]
-    nb repo del data all
+
 
 ### Adding/deleting/updating hexagons on map
     nb map add [0,0,0] [ref]
-    nb map add file [file.csv]
     nb map add data [0,0,0] [key] [value]
     nb map add data file [file.csv]
     nb map get [0,0,0]
@@ -28,7 +26,13 @@ Command line interface to manipulate game content
     nb map update data [0,0,0] [key] [value]
     nb map del [0,0,0]
     nb map del data [0,0,0]
+
+### Bulk operations
+    nb repo del data all
     nb map del data all
+    nb repo add file [file.csv]
+    nb map add file [file.csv]
+    nb grap add file [graph.gv] 
 
 #### CSV data file example      
     -1,0,direction,S

@@ -1,9 +1,10 @@
 package hexgraph
 
 import (
+	"fmt"
 	"github.com/3vilM33pl3/hexrepo/src/hexcloud/pkg/hexgrid"
-	"github.com/dominikbraun/graph"
-	"github.com/dominikbraun/graph/draw"
+	"gonum.org/v1/gonum/graph/encoding/dot"
+	"gonum.org/v1/gonum/graph/simple"
 	"os"
 )
 
@@ -16,41 +17,44 @@ type Hex struct {
 
 type Map struct {
 	Name       string
-	HexGraph   graph.Graph[int64, Hex]
-	RiverGraph graph.Graph[int64, Hex]
+	HexGraph   *simple.UndirectedGraph
+	RiverGraph *simple.DirectedGraph
 }
 
 func NewMap(name string) Map {
-	hexHash := func(h Hex) int64 {
-		return h.ID
-	}
 
-	hexG := graph.New(hexHash)
-	riverG := graph.New(hexHash, graph.Directed())
+	hexG := simple.NewUndirectedGraph()
+	hexR := simple.NewDirectedGraph()
 
-	return Map{name, hexG, riverG}
+	return Map{name, hexG, hexR}
 }
 
 func (m *Map) Generate(size int) {
 
-	m.HexGraph.AddVertex(Hex{ID: hexgrid.Pair(0, 0), X: 0, Y: 0, Z: 0})
-	m.RiverGraph.AddVertex(Hex{ID: hexgrid.Pair(0, 0), X: 0, Y: 0, Z: 0})
+	m.HexGraph.AddNode(simple.Node(hexgrid.Pair(0, 0)))
+	m.RiverGraph.AddNode(simple.Node(hexgrid.Pair(0, 0)))
 
 	for i := 1; i <= size; i++ {
 		hexes := hexgrid.Ring(hexgrid.NewHexXYZ(0, 0, 0), int64(i))
 
+		var node simple.Node
 		for _, hex := range hexes {
-			m.HexGraph.AddVertex(Hex{ID: hexgrid.Pair(hex.X, hex.Y), X: hex.X, Y: hex.Y, Z: hex.Z})
+			node = simple.Node(hexgrid.Pair(hex.X, hex.Y))
+			m.HexGraph.AddNode(node)
 		}
 
 		for _, hex := range hexes {
 			neighbours := hexgrid.Ring(hexgrid.NewHexXYZ(hex.X, hex.Y, -hex.X-hex.Y), 1)
 			for _, neighbour := range neighbours {
-				nb, err := m.HexGraph.Vertex(hexgrid.Pair(neighbour.X, neighbour.Y))
-				if err != nil {
+				nid := hexgrid.Pair(neighbour.X, neighbour.Y)
+
+				// Check if node exists
+				if m.HexGraph.Node(nid) == nil {
 					continue
 				}
-				m.HexGraph.AddEdge(hexgrid.Pair(hex.X, hex.Y), nb.ID)
+
+				m.HexGraph.SetEdge(simple.Edge{simple.Node(hexgrid.Pair(hex.X, hex.Y)), m.HexGraph.Node(nid)})
+
 			}
 		}
 	}
@@ -58,6 +62,12 @@ func (m *Map) Generate(size int) {
 }
 
 func (m *Map) DOT() {
-	file, _ := os.Create("./mygraph.gv")
-	_ = draw.DOT(m.HexGraph, file)
+	result, _ := dot.Marshal(m.HexGraph, "", "", "  ")
+	file, err := os.Create("mygraph.gv")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	file.WriteString(string(result))
+
 }

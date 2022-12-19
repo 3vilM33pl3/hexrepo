@@ -34,6 +34,7 @@ func (m *Map) Generate(size int) {
 	m.HexGraph.AddNode(simple.Node(hexgrid.Pair(0, 0)))
 	m.RiverGraph.AddNode(simple.Node(hexgrid.Pair(0, 0)))
 
+
 	for i := 1; i <= size; i++ {
 		hexes := hexgrid.Ring(hexgrid.NewHexXYZ(0, 0, 0), int64(i))
 
@@ -69,5 +70,4 @@ func (m *Map) DOT() {
 		return
 	}
 	file.WriteString(string(result))
-
 }

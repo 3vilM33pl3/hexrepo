@@ -64,4 +64,7 @@ func init() {
 	rootCmd.AddCommand(pairCmd)
 	rootCmd.AddCommand(unPairCmd)
 
+	rootCmd.AddCommand(graphCmd)
+	graphCmd.AddCommand(graphAddCmd)
+
 }

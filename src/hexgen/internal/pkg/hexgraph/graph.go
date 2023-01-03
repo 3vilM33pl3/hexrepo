@@ -15,6 +15,15 @@ type Hex struct {
 	Z  int64
 }
 
+type HexNode struct {
+	id   int64
+	Data string
+}
+
+func (n HexNode) ID() int64 {
+	return n.id
+}
+
 type Map struct {
 	Name       string
 	HexGraph   *simple.UndirectedGraph
@@ -34,13 +43,13 @@ func (m *Map) Generate(size int) {
 	m.HexGraph.AddNode(simple.Node(hexgrid.Pair(0, 0)))
 	m.RiverGraph.AddNode(simple.Node(hexgrid.Pair(0, 0)))
 
-
 	for i := 1; i <= size; i++ {
 		hexes := hexgrid.Ring(hexgrid.NewHexXYZ(0, 0, 0), int64(i))
 
-		var node simple.Node
+		var node HexNode
 		for _, hex := range hexes {
-			node = simple.Node(hexgrid.Pair(hex.X, hex.Y))
+			//node = simple.Node(hexgrid.Pair(hex.X, hex.Y))
+			node = HexNode{hexgrid.Pair(hex.X, hex.Y), "lala"}
 			m.HexGraph.AddNode(node)
 		}
 

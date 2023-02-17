@@ -13,17 +13,17 @@ The [vcpkg](https://vcpkg.io/en/index.html) manager is installed as a git submod
     vcpkg install abseil --triplet x64-windows
 
 ### Mac
-
-
-
+    brew install pkg-config
+    vcpkg install grpc 
+    vcpkg install protobuf 
+    vcpkg install cli
+    vcpkg install abseil 
 
 ## Compile
 ### Windows
 Make sure your toolchain is configured for 64 bit builds.
 ### Dependencies
 Install dependencies with  manager:
-
-
 
 #### Ninja (Optional but recommended)
 Ninja dramatically accelerates building c++ programs. 

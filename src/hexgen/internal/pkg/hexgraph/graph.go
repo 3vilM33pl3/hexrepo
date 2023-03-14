@@ -28,14 +28,16 @@ type Map struct {
 	Name       string
 	HexGraph   *simple.UndirectedGraph
 	RiverGraph *simple.DirectedGraph
+	BiomeGraph *simple.UndirectedGraph
 }
 
 func NewMap(name string) Map {
 
 	hexG := simple.NewUndirectedGraph()
 	hexR := simple.NewDirectedGraph()
+	hexB := simple.NewUndirectedGraph()
 
-	return Map{name, hexG, hexR}
+	return Map{name, hexG, hexR, hexB}
 }
 
 func (m *Map) Generate(size int) {

@@ -33,7 +33,7 @@ var graphAddCmd = &cobra.Command{
 			return
 		}
 
-		fmt.Println("graph: %s", astFile.String())
+		fmt.Printf("graph: %s\n", astFile.String())
 
 	},
 }

@@ -6,6 +6,7 @@ out/
 .cmake/
 .DS_Store
 
+
 ### CMake template
 CMakeLists.txt.user
 CMakeCache.txt

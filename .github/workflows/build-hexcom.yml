@@ -18,7 +18,7 @@ jobs:
   build-hexcom:
     runs-on: [self-hosted, Windows, X64]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Configure 
         working-directory: ./src/hexcom
         run:  |
